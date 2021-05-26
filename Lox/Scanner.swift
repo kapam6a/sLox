@@ -84,7 +84,7 @@ private extension Scanner {
     }
     
     func addToken( _ tokenType: TokenType, _ object: Literal? = nil) {
-        let string = Array(sourceCode[start...current - 1])
+        let string = Array(sourceCode[start..<current])
         tokens.append(Token(type: tokenType, lexeme: String(string), literal: object, line: line))
     }
     
@@ -151,7 +151,7 @@ private extension Scanner {
         
         advance()
         
-        let string = Array(sourceCode[start + 1...current - 2])
+        let string = Array(sourceCode[start + 1..<current - 1])
         addToken(.string, .string(String(string)))
     }
     
@@ -166,13 +166,13 @@ private extension Scanner {
                 advance()
             }
         }
-        let number = Array(sourceCode[start...current - 1])
+        let number = Array(sourceCode[start..<current])
         addToken(.number, .number(Double(String(number))!))
     }
     
     func identifier() {
         while peek().isLetter || peek().isNumber || peek() == "_" { advance() }
-        let identifier = Array(sourceCode[start...current - 1])
+        let identifier = Array(sourceCode[start..<current])
         if let type = keywords[String(identifier)] {
             addToken(type)
         } else {
