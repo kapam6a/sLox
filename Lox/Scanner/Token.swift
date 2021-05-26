@@ -7,9 +7,16 @@
 
 import Foundation
 
-enum LiteralType: Equatable {
+enum LiteralType: Equatable, CustomStringConvertible {
     case string(String)
     case number(Double)
+    
+    var description: String {
+        switch self {
+        case .string(let string): return string
+        case .number(let number): return String(number)
+        }
+    }
 }
 
 struct Token: Equatable, CustomStringConvertible {

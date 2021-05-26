@@ -1,12 +1,15 @@
 protocol Expr {
-	func accept<T>(visitor: Visitor) -> T
+	func accept<V: Visitor, T>(visitor: V) -> T where T == V.T
 }
 
 protocol Visitor {
-	func visitBinaryExpr<T>( _ expr: Binary) -> T
-	func visitGroupingExpr<T>( _ expr: Grouping) -> T
-	func visitLiteralExpr<T>( _ expr: Literal) -> T
-	func visitUnaryExpr<T>( _ expr: Unary) -> T
+
+	associatedtype T
+
+	func visitBinaryExpr( _ expr: Binary) -> T
+	func visitGroupingExpr( _ expr: Grouping) -> T
+	func visitLiteralExpr( _ expr: Literal) -> T
+	func visitUnaryExpr( _ expr: Unary) -> T
 }
 
 final class Binary: Expr {
@@ -21,7 +24,7 @@ final class Binary: Expr {
 		self.right = right
 	}
 
-	func accept<T>(visitor: Visitor) -> T {
+	func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
 		visitor.visitBinaryExpr(self)
 	}
 }
@@ -34,20 +37,20 @@ final class Grouping: Expr {
 		self.expression = expression
 	}
 
-	func accept<T>(visitor: Visitor) -> T {
+	func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
 		visitor.visitGroupingExpr(self)
 	}
 }
 
 final class Literal: Expr {
 
-	let value: Literal
+	let value: LiteralType?
 
-	init(value: Literal) {
+	init(value: LiteralType?) {
 		self.value = value
 	}
 
-	func accept<T>(visitor: Visitor) -> T {
+	func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
 		visitor.visitLiteralExpr(self)
 	}
 }
@@ -62,7 +65,7 @@ final class Unary: Expr {
 		self.right = right
 	}
 
-	func accept<T>(visitor: Visitor) -> T {
+	func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
 		visitor.visitUnaryExpr(self)
 	}
 }

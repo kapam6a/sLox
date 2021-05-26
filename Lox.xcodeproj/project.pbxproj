@@ -19,6 +19,7 @@
 		3C33E0AF265D3BE700EF1612 /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33E093265BE7EC00EF1612 /* Scanner.swift */; };
 		3C33E0BD265E3A0100EF1612 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33E0BC265E3A0100EF1612 /* Expr.swift */; };
 		3C33E0C7265E3D9900EF1612 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33E0C6265E3D9900EF1612 /* main.swift */; };
+		3C33E0D0265E704400EF1612 /* AstPrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33E0CF265E704400EF1612 /* AstPrinter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -55,6 +56,7 @@
 		3C33E0BC265E3A0100EF1612 /* Expr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expr.swift; sourceTree = "<group>"; };
 		3C33E0C4265E3D9900EF1612 /* AstGenerator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AstGenerator; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C33E0C6265E3D9900EF1612 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		3C33E0CF265E704400EF1612 /* AstPrinter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstPrinter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 				3C33E08A265BC88200EF1612 /* Lox.swift */,
 				3C33E0BA265E39D100EF1612 /* Scanner */,
 				3C33E0BB265E39E600EF1612 /* Parser */,
+				3C33E0CE265E702D00EF1612 /* Printer */,
 			);
 			path = Lox;
 			sourceTree = "<group>";
@@ -146,6 +149,14 @@
 				3C33E0C6265E3D9900EF1612 /* main.swift */,
 			);
 			path = AstGenerator;
+			sourceTree = "<group>";
+		};
+		3C33E0CE265E702D00EF1612 /* Printer */ = {
+			isa = PBXGroup;
+			children = (
+				3C33E0CF265E704400EF1612 /* AstPrinter.swift */,
+			);
+			path = Printer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,6 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C33E0D0265E704400EF1612 /* AstPrinter.swift in Sources */,
 				3C33E08E265BE0DB00EF1612 /* TokenType.swift in Sources */,
 				3C33E083265BBF3300EF1612 /* main.swift in Sources */,
 				3C33E08B265BC88200EF1612 /* Lox.swift in Sources */,
