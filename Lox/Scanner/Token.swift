@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Literal: Equatable {
+enum LiteralType: Equatable {
     case string(String)
     case number(Double)
 }
@@ -16,7 +16,7 @@ struct Token: Equatable, CustomStringConvertible {
     
     let type: TokenType
     let lexeme: String
-    let literal: Literal?
+    let literal: LiteralType?
     let line: Int
     
     var description: String {

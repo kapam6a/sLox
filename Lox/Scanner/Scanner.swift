@@ -83,7 +83,7 @@ private extension Scanner {
         }
     }
     
-    func addToken( _ tokenType: TokenType, _ object: Literal? = nil) {
+    func addToken( _ tokenType: TokenType, _ object: LiteralType? = nil) {
         let string = Array(sourceCode[start..<current])
         tokens.append(Token(type: tokenType, lexeme: String(string), literal: object, line: line))
     }

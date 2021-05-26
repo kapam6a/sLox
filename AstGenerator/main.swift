@@ -22,7 +22,11 @@ defineAst(outputDir, "Expr", [
 
 func defineAst(_ outputDir: String, _ baseName: String, _ types: [String]) {
     let fullPath = outputDir + baseName + ".swift"
-    var str = "class " + baseName + " {}" + "\n"
+    var str = "protocol " + baseName + " {" + "\n"
+    str.append("\t" + "func accept<T>(visitor: Visitor) -> T" + "\n")
+    str.append("}" + "\n")
+    str.append("\n")
+    str.append(defineVisitor(baseName, types))
     str.append("\n")
     types.forEach {
         let className = $0.components(separatedBy: "::")[0].trimmingCharacters(in: .whitespaces)
@@ -46,6 +50,20 @@ func defineType(_ baseName: String, _ className: String, _ fields: String) -> St
         str.append("\t\t" + "self." + name + " = " + name + "\n")
     }
     str.append("\t" + "}" + "\n")
+    str.append("\n")
+    str.append("\t" + "func accept<T>(visitor: Visitor) -> T {" + "\n")
+    str.append("\t\t" + "visitor.visit" + className + baseName + "(self)" + "\n")
+    str.append("\t" + "}" + "\n")
+    str.append("}" + "\n")
+    return str
+}
+
+func defineVisitor(_ baseName: String, _ types: [String]) -> String {
+    var str = "protocol Visitor {" + "\n"
+    types.forEach {
+        let className = $0.components(separatedBy: "::")[0].trimmingCharacters(in: .whitespaces)
+        str.append("\t" + "func visit" + className + baseName + "<T>( _ " + baseName.lowercased() + ": " + className + ") -> T" + "\n")
+    }
     str.append("}" + "\n")
     return str
 }
