@@ -14,7 +14,11 @@ enum LiteralType: Equatable, CustomStringConvertible {
     var description: String {
         switch self {
         case .string(let string): return string
-        case .number(let number): return String(number)
+        case .number(let number):
+            let formatter = NumberFormatter()
+            formatter.minimumFractionDigits = 0
+            formatter.numberStyle = .decimal
+            return formatter.string(from: NSNumber(value: number))!
         }
     }
 }

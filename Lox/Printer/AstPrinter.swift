@@ -33,10 +33,10 @@ final class AstPrinter: Visitor {
 
 private extension AstPrinter {
     
-    func parenthesize(_ name: String , _ exprs: Expr... ) -> String {
+    func parenthesize(_ name: String , _ exprs: Expr...) -> String {
         var str = "(" + name
         exprs.forEach {
-            str.append("\t" + $0.accept(visitor: self))
+            str.append(" " + $0.accept(visitor: self))
         }
         str.append(")")
         return str
