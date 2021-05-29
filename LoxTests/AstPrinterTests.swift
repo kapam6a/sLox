@@ -32,7 +32,7 @@ final class AstPrinterTests: XCTestCase {
                 right: Literal(value: .number(123))),
             operator: Token(type: .star, lexeme: "*", literal: nil, line: 1),
             right: Grouping(
-                expression: Literal(value: .number(45.67))
+                expressions: [Literal(value: .number(45.67))]
             )
         )
         

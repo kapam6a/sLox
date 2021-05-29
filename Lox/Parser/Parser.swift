@@ -92,9 +92,12 @@ private extension Parser {
         if match(.nil) { return Literal(value: nil) }
         if match(.number, .string) { return Literal(value: previous().literal) }
         if match(.leftParen) {
-            let exp = try expression()
+            var exps = [try expression()]
+            while match(.comma) {
+                exps.append(try expression())
+            }
             try consume(.rightParen, "Expect ')' after expression.")
-            return Grouping(expression: exp)
+            return Grouping(expressions: exps)
         }
         
         throw error(peek(), "Expect expression.")

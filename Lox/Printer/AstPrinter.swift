@@ -14,11 +14,11 @@ final class AstPrinter: Visitor {
     }
     
     func visitBinaryExpr(_ expr: Binary) -> String {
-        parenthesize(expr.operator.lexeme, expr.left, expr.right)
+        parenthesize(expr.operator.lexeme, [expr.left, expr.right])
     }
     
     func visitGroupingExpr(_ expr: Grouping) -> String {
-        parenthesize("group", expr.expression)
+        parenthesize("group", expr.expressions)
     }
     
     func visitLiteralExpr(_ expr: Literal) -> String {
@@ -27,13 +27,13 @@ final class AstPrinter: Visitor {
     }
     
     func visitUnaryExpr(_ expr: Unary) -> String {
-        parenthesize(expr.operator.lexeme, expr.right)
+        parenthesize(expr.operator.lexeme, [expr.right])
     }
 }
 
 private extension AstPrinter {
     
-    func parenthesize(_ name: String , _ exprs: Expr...) -> String {
+    func parenthesize(_ name: String , _ exprs: [Expr]) -> String {
         var str = "(" + name
         exprs.forEach {
             str.append(" " + $0.accept(visitor: self))

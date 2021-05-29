@@ -14,11 +14,11 @@ final class RpnAstPrinter: Visitor {
     }
     
     func visitBinaryExpr(_ expr: Binary) -> String {
-        format(expr.operator.lexeme, expr.left, expr.right)
+        format(expr.operator.lexeme, [expr.left, expr.right])
     }
     
     func visitGroupingExpr(_ expr: Grouping) -> String {
-        format(expr.expression.accept(visitor: self))
+        format(nil, expr.expressions)
     }
     
     func visitLiteralExpr(_ expr: Literal) -> String {
@@ -27,15 +27,21 @@ final class RpnAstPrinter: Visitor {
     }
     
     func visitUnaryExpr(_ expr: Unary) -> String {
-        format(expr.operator.lexeme, expr.right)
+        format(expr.operator.lexeme, [expr.right])
     }
 }
 
 private extension RpnAstPrinter {
     
-    func format(_ name: String? = nil, _ exprs: Expr...) -> String {
-        var str = exprs.reduce("", { $0 + $1.accept(visitor: self) })
-        name.map { str.append(" " + $0) }
+    func format(_ name: String?, _ exprs: [Expr]) -> String {
+        var str = ""
+        if exprs.count == 1 {
+            str.append(exprs[0].accept(visitor: self))
+            name.map { str.append(" " + $0) }
+        } else {
+            exprs.forEach { str.append($0.accept(visitor: self) + " ") }
+            name.map { str.append($0) }
+        }
         return str
     }
 }

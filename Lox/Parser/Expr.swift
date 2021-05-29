@@ -48,10 +48,10 @@ final class Binary: Expr {
 
 final class Grouping: Expr {
 
-	let expression: Expr
+	let expressions: [Expr]
 
-	init(expression: Expr) {
-		self.expression = expression
+	init(expressions: [Expr]) {
+		self.expressions = expressions
 	}
 
 	override func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
@@ -60,7 +60,7 @@ final class Grouping: Expr {
 
 	override func isEqual(to other: Expr) -> Bool {
 		guard let other = other as? Grouping else { return false }
-		return self.expression == other.expression
+		return self.expressions == other.expressions
 	}
 }
 

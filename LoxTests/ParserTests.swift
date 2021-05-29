@@ -109,7 +109,7 @@ class ParserTests: XCTestCase {
         let result = sut.parse()
         
         // then
-        XCTAssertEqual(result, Grouping(expression: Literal(value: nil)))
+        XCTAssertEqual(result, Grouping(expressions: [Literal(value: nil)]))
         XCTAssertFalse(Lox.hadError)
     }
     
@@ -586,19 +586,21 @@ class ParserTests: XCTestCase {
             result,
             Binary(
                 left: Grouping(
-                    expression: Binary(
-                        left: Literal(value: .number(44)),
-                        operator: Token(type: .greater, lexeme: ">", literal: nil, line: 1),
-                        right: Binary(
-                            left: Literal(value: .number(33)),
-                            operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+                    expressions: [
+                        Binary(
+                            left: Literal(value: .number(44)),
+                            operator: Token(type: .greater, lexeme: ">", literal: nil, line: 1),
                             right: Binary(
-                                left: Literal(value: .number(11)),
-                                operator: Token(type: .slash, lexeme: "/", literal: nil, line: 1),
-                                right: Literal(value: .number(22))
+                                left: Literal(value: .number(33)),
+                                operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+                                right: Binary(
+                                    left: Literal(value: .number(11)),
+                                    operator: Token(type: .slash, lexeme: "/", literal: nil, line: 1),
+                                    right: Literal(value: .number(22))
+                                )
                             )
                         )
-                    )
+                    ]
                 ),
                 operator: Token(type: .star, lexeme: "*", literal: nil, line: 1),
                 right: Literal(value: .number(2))
@@ -653,5 +655,38 @@ class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(result, nil)
         XCTAssertTrue(Lox.hadError)
+    }
+    
+    func testParse_groupOfExpressions_returnsGroup() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .leftParen, lexeme: "(", literal: nil, line: 1),
+             Token(type: .number, lexeme: "22", literal: .number(22), line: 1),
+             Token(type: .comma, lexeme: ",", literal: nil, line: 1),
+             Token(type: .number, lexeme: "33", literal: .number(33), line: 1),
+             Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+             Token(type: .number, lexeme: "11", literal: .number(11), line: 1),
+             Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(
+            result,
+            Grouping(
+                expressions: [
+                    Literal(value: .number(22)),
+                    Binary(
+                        left: Literal(value: .number(33)),
+                        operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+                        right: Literal(value: .number(11)))
+                ]
+            )
+        )
+        XCTAssertFalse(Lox.hadError)
     }
 }

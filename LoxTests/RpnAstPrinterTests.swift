@@ -28,15 +28,15 @@ final class RpnAstPrinterTests: XCTestCase {
         // given
         let exp = Binary(
             left: Binary(
-                left: Grouping(expression: Literal(value: .number(1))),
+                left: Grouping(expressions: [Literal(value: .number(1))]),
                 operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
-                right: Grouping(expression: Literal(value: .number(2)))
+                right: Grouping(expressions: [Literal(value: .number(2))])
             ),
             operator: Token(type: .star, lexeme: "*", literal: nil, line: 1),
             right: Binary(
-                left: Grouping(expression: Literal(value: .number(4))),
+                left: Grouping(expressions: [Literal(value: .number(4))]),
                 operator: Token(type: .minus, lexeme: "-", literal: nil, line: 1),
-                right: Grouping(expression: Literal(value: .number(3)))
+                right: Grouping(expressions: [Literal(value: .number(3))])
             )
         )
         
@@ -44,6 +44,6 @@ final class RpnAstPrinterTests: XCTestCase {
         let result = sut.print(exp)
         
         // then
-        XCTAssertEqual(result, " 1 2 + 4 3 - *")
+        XCTAssertEqual(result, "1 2 + 4 3 - *")
     }
 }

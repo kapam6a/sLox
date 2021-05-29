@@ -15,7 +15,7 @@ let outputDir = CommandLine.arguments[1]
 
 defineAst(outputDir, "Expr", [
     "Binary   :: left: Expr, `operator`: Token, right: Expr",
-    "Grouping :: expression: Expr",
+    "Grouping :: expressions: [Expr]",
     "Literal  :: value: LiteralType?",
     "Unary    :: `operator`: Token, right: Expr"
 ])
