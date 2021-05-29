@@ -15,21 +15,6 @@ class ParserTests: XCTestCase {
         Lox.hadError = false
     }
     
-    func testParse_eofOnly_returnsNil() {
-        
-        // given
-        let sut = Parser(
-            [Token(type: .eof, lexeme: "", literal: nil, line: 1)]
-        )
-        
-        // when
-        let result = sut.parse()
-        
-        // then
-        XCTAssertEqual(result, nil)
-        XCTAssertFalse(Lox.hadError)
-    }
-    
     func testParse_number_returnsLiteral() {
         
         // given
@@ -645,6 +630,21 @@ class ParserTests: XCTestCase {
         let sut = Parser(
             [Token(type: .leftParen, lexeme: ")", literal: nil, line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(result, nil)
+        XCTAssertTrue(Lox.hadError)
+    }
+    
+    func testParse_eofOnly_returnsError() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
         // when
