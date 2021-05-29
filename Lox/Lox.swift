@@ -11,6 +11,8 @@ final class Lox {
     
     static var hadError = false
     
+    static var errorReporter: ErrorReporter = StandardErrorReporter()
+    
     static func runFile(_ filePath: String) {
         let sourceCode = try! String(contentsOf: URL(fileURLWithPath: filePath))
         Lox.run(sourceCode)
@@ -35,24 +37,16 @@ final class Lox {
     }
     
     static func error(_ line: Int, _ message: String) {
-        report(line, "", message)
+        errorReporter.report(line, "", message)
         hadError = true
     }
     
     static func error(_ token: Token, _ message: String) {
         if token.type == .eof {
-            report(token.line, " at end", message)
+            errorReporter.report(token.line, " at end", message)
         } else {
-            report(token.line, " at '" + token.lexeme + "'", message)
+            errorReporter.report(token.line, " at '" + token.lexeme + "'", message)
         }
         hadError = true
-    }
-}
-
-extension Lox {
-    
-    static func report(_ line: Int, _ where: String, _ message: String) {
-        let data = "[line \(line) ] Error \(`where`): \(message)".data(using: .ascii)
-        FileHandle.standardError.write(data!)
     }
 }

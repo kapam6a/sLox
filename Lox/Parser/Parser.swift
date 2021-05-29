@@ -78,10 +78,13 @@ private extension Parser {
     }
     
     func unary() throws -> Expr {
-        while match(.bang, .minus) {
+        while match(.bang, .minus, .plus) {
             let `operator` = previous()
             let right = try unary()
-            return Unary(operator: `operator`, right: right)
+            switch `operator`.type {
+            case .plus: throw error(`operator`, "Unary ‘+’ expressions are not supported")
+            default: return Unary(operator: `operator`, right: right)
+            }
         }
         return try primary()
     }

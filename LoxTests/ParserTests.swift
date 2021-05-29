@@ -9,10 +9,20 @@ import XCTest
 
 class ParserTests: XCTestCase {
     
+    private var errorReporter: ErrorReporterMock!
+    
     override func setUp() {
         super.setUp()
         
+        errorReporter = ErrorReporterMock()
         Lox.hadError = false
+        Lox.errorReporter = errorReporter
+    }
+    
+    override func tearDown() {
+        errorReporter = nil
+        
+        super.tearDown()
     }
     
     func testParse_number_returnsLiteral() {
@@ -688,5 +698,22 @@ class ParserTests: XCTestCase {
             )
         )
         XCTAssertFalse(Lox.hadError)
+    }
+    
+    func testParse_numberWithPlus_reportsSpecificError() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(result, nil)
+        XCTAssertEqual(errorReporter.reportArgs?.2, "Unary ‘+’ expressions are not supported")
     }
 }
