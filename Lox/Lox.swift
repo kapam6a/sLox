@@ -45,6 +45,7 @@ final class Lox {
         } else {
             report(token.line, " at '" + token.lexeme + "'", message)
         }
+        hadError = true
     }
 }
 

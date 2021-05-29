@@ -27,6 +27,8 @@
 		3CF7691A265FDE0800A99096 /* RpnAstPrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF76915265FDE0500A99096 /* RpnAstPrinter.swift */; };
 		3CF7691F265FE00100A99096 /* RpnAstPrinterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7691E265FE00100A99096 /* RpnAstPrinterTests.swift */; };
 		3CF769272660FE8200A99096 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF769262660FE8200A99096 /* Parser.swift */; };
+		3CF7692C26621BB900A99096 /* ParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7692B26621BB900A99096 /* ParserTests.swift */; };
+		3CF7693026621C2600A99096 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF769262660FE8200A99096 /* Parser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -68,6 +70,7 @@
 		3CF76915265FDE0500A99096 /* RpnAstPrinter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RpnAstPrinter.swift; sourceTree = "<group>"; };
 		3CF7691E265FE00100A99096 /* RpnAstPrinterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RpnAstPrinterTests.swift; sourceTree = "<group>"; };
 		3CF769262660FE8200A99096 /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		3CF7692B26621BB900A99096 /* ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +136,7 @@
 				3CF76908265FDA3C00A99096 /* AstPrinterTests.swift */,
 				3CF7691E265FE00100A99096 /* RpnAstPrinterTests.swift */,
 				3C33E09C265D39B700EF1612 /* ScannerTests.swift */,
+				3CF7692B26621BB900A99096 /* ParserTests.swift */,
 				3C33E09E265D39B700EF1612 /* Info.plist */,
 			);
 			path = LoxTests;
@@ -304,8 +308,10 @@
 				3CF76909265FDA3C00A99096 /* AstPrinterTests.swift in Sources */,
 				3C33E09D265D39B700EF1612 /* ScannerTests.swift in Sources */,
 				3CF76911265FDABD00A99096 /* Expr.swift in Sources */,
+				3CF7692C26621BB900A99096 /* ParserTests.swift in Sources */,
 				3C33E0A6265D3BDE00EF1612 /* Lox.swift in Sources */,
 				3C33E0AF265D3BE700EF1612 /* Scanner.swift in Sources */,
+				3CF7693026621C2600A99096 /* Parser.swift in Sources */,
 				3C33E0AC265D3BE400EF1612 /* Token.swift in Sources */,
 				3CF7691F265FE00100A99096 /* RpnAstPrinterTests.swift in Sources */,
 				3CF7691A265FDE0800A99096 /* RpnAstPrinter.swift in Sources */,

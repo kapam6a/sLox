@@ -1,5 +1,15 @@
-protocol Expr {
-	func accept<V: Visitor, T>(visitor: V) -> T where T == V.T
+class Expr: Equatable {
+	func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
+		fatalError()
+	}
+
+	static func == (lhs: Expr, rhs: Expr) -> Bool {
+		lhs.isEqual(to: rhs)
+	}
+
+	func isEqual(to other: Expr) -> Bool {
+		fatalError()
+	}
 }
 
 protocol Visitor {
@@ -24,8 +34,15 @@ final class Binary: Expr {
 		self.right = right
 	}
 
-	func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
+	override func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
 		visitor.visitBinaryExpr(self)
+	}
+
+	override func isEqual(to other: Expr) -> Bool {
+		guard let other = other as? Binary else { return false }
+		return self.left == other.left &&
+			self.`operator` == other.`operator` &&
+			self.right == other.right
 	}
 }
 
@@ -37,8 +54,13 @@ final class Grouping: Expr {
 		self.expression = expression
 	}
 
-	func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
+	override func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
 		visitor.visitGroupingExpr(self)
+	}
+
+	override func isEqual(to other: Expr) -> Bool {
+		guard let other = other as? Grouping else { return false }
+		return self.expression == other.expression
 	}
 }
 
@@ -50,8 +72,13 @@ final class Literal: Expr {
 		self.value = value
 	}
 
-	func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
+	override func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
 		visitor.visitLiteralExpr(self)
+	}
+
+	override func isEqual(to other: Expr) -> Bool {
+		guard let other = other as? Literal else { return false }
+		return self.value == other.value
 	}
 }
 
@@ -65,8 +92,14 @@ final class Unary: Expr {
 		self.right = right
 	}
 
-	func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
+	override func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
 		visitor.visitUnaryExpr(self)
+	}
+
+	override func isEqual(to other: Expr) -> Bool {
+		guard let other = other as? Unary else { return false }
+		return self.`operator` == other.`operator` &&
+			self.right == other.right
 	}
 }
 
