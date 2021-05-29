@@ -29,12 +29,22 @@ final class Lox {
     static func run(_ sourceCode: String) {
         let scanner = Scanner(sourceCode)
         let tokens = scanner.scanTokens()
-        tokens.forEach { print($0) }
+        let parser = Parser(tokens)
+        let expr = parser.parse()
+        expr.map { print(AstPrinter().print($0)) }
     }
     
     static func error(_ line: Int, _ message: String) {
         report(line, "", message)
         hadError = true
+    }
+    
+    static func error(_ token: Token, _ message: String) {
+        if token.type == .eof {
+            report(token.line, " at end", message)
+        } else {
+            report(token.line, " at '" + token.lexeme + "'", message)
+        }
     }
 }
 

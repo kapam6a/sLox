@@ -10,10 +10,12 @@ import Foundation
 enum LiteralType: Equatable, CustomStringConvertible {
     case string(String)
     case number(Double)
+    case boolean(Bool)
     
     var description: String {
         switch self {
         case .string(let string): return string
+        case .boolean(let bool): return String(bool)
         case .number(let number):
             let formatter = NumberFormatter()
             formatter.minimumFractionDigits = 0
