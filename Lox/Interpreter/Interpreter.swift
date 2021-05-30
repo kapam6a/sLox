@@ -144,21 +144,9 @@ private extension Interpreter {
     func compareOperands(_ token: Token, _ left: Any?, _ right: Any?) throws -> Bool {
         switch (left, right) {
         case (let left as String, let right as String):
-            switch token.type {
-            case .less: return left < right
-            case .lessEqual: return left <= right
-            case .greater: return left > right
-            case .greaterEqual: return left >= right
-            default: fatalError()
-            }
+            return compareOperands(token, left, right)
         case (let left as Double, let right as Double):
-            switch token.type {
-            case .less: return left < right
-            case .lessEqual: return left <= right
-            case .greater: return left > right
-            case .greaterEqual: return left >= right
-            default: fatalError()
-            }
+            return compareOperands(token, left, right)
         default: throw RuntimeError(operator: token,
                                     message: "Operands must be a number or string.")
         }
@@ -172,5 +160,15 @@ private extension Interpreter {
     func checkNumberOperands(_ token: Token, _ left: Any?, _ right: Any?) throws {
         if left is Double, right is Double  { return }
         throw RuntimeError(operator: token, message: "Operands must be a number.")
+    }
+    
+    func compareOperands<T: Comparable>(_ token: Token, _ left: T, _ right: T) -> Bool  {
+        switch token.type {
+        case .less: return left < right
+        case .lessEqual: return left <= right
+        case .greater: return left > right
+        case .greaterEqual: return left >= right
+        default: fatalError()
+        }
     }
 }
