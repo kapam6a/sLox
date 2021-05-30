@@ -42,6 +42,8 @@
 		3CF7697026636AD000A99096 /* PrinterMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7696F26636AD000A99096 /* PrinterMock.swift */; };
 		3CF7697426636B4900A99096 /* Printer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF76965266369BA00A99096 /* Printer.swift */; };
 		3CF7697826636B4C00A99096 /* StandardPrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7696A26636A1700A99096 /* StandardPrinter.swift */; };
+		3CF769802663E20A00A99096 /* Stmt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7697F2663E20A00A99096 /* Stmt.swift */; };
+		3CF769842663E20E00A99096 /* Stmt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7697F2663E20A00A99096 /* Stmt.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -92,6 +94,7 @@
 		3CF76965266369BA00A99096 /* Printer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Printer.swift; sourceTree = "<group>"; };
 		3CF7696A26636A1700A99096 /* StandardPrinter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardPrinter.swift; sourceTree = "<group>"; };
 		3CF7696F26636AD000A99096 /* PrinterMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrinterMock.swift; sourceTree = "<group>"; };
+		3CF7697F2663E20A00A99096 /* Stmt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stmt.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +183,7 @@
 		3C33E0BB265E39E600EF1612 /* Parser */ = {
 			isa = PBXGroup;
 			children = (
+				3CF7697F2663E20A00A99096 /* Stmt.swift */,
 				3C33E0BC265E3A0100EF1612 /* Expr.swift */,
 				3CF769262660FE8200A99096 /* Parser.swift */,
 			);
@@ -342,6 +346,7 @@
 			files = (
 				3CF76958266295C900A99096 /* Interpreter.swift in Sources */,
 				3C33E0D0265E704400EF1612 /* AstPrinter.swift in Sources */,
+				3CF769802663E20A00A99096 /* Stmt.swift in Sources */,
 				3C33E08E265BE0DB00EF1612 /* TokenType.swift in Sources */,
 				3CF76916265FDE0500A99096 /* RpnAstPrinter.swift in Sources */,
 				3CF76936266272F900A99096 /* ErrorReporter.swift in Sources */,
@@ -372,6 +377,7 @@
 				3C33E09D265D39B700EF1612 /* ScannerTests.swift in Sources */,
 				3CF7697826636B4C00A99096 /* StandardPrinter.swift in Sources */,
 				3CF76911265FDABD00A99096 /* Expr.swift in Sources */,
+				3CF769842663E20E00A99096 /* Stmt.swift in Sources */,
 				3CF7692C26621BB900A99096 /* ParserTests.swift in Sources */,
 				3C33E0A6265D3BDE00EF1612 /* Lox.swift in Sources */,
 				3C33E0AF265D3BE700EF1612 /* Scanner.swift in Sources */,

@@ -31,7 +31,7 @@ final class Interpreter {
     }
 }
 
-extension Interpreter: Visitor {
+extension Interpreter: VisitorExpr {
     
     func visitBinaryExpr(_ expr: Binary) throws -> Any? {
         let left = try evaluate(expr.left)

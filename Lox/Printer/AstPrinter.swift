@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class AstPrinter: Visitor {
+final class AstPrinter: VisitorExpr {
     
     func print(_ expr: Expr) -> String {
         try! expr.accept(visitor: self)

@@ -20,6 +20,11 @@ defineAst(outputDir, "Expr", [
     "Unary    :: `operator`: Token, right: Expr"
 ])
 
+defineAst(outputDir, "Stmt", [
+    "Expression :: expression: Expr",
+    "Print      :: expression: Expr"
+])
+
 func defineAst(_ outputDir: String, _ baseName: String, _ types: [String]) {
     var str = defineExpr(baseName)
     str.append(defineVisitor(baseName, types))
@@ -34,15 +39,15 @@ func defineAst(_ outputDir: String, _ baseName: String, _ types: [String]) {
 
 func defineExpr(_ baseName: String) -> String {
     var str = "class " + baseName + ": Equatable {" + "\n"
-    str.append("\t" + "func accept<V: Visitor, T>(visitor: V) throws -> T where T == V.T {" + "\n")
+    str.append("\t" + "func accept<V: Visitor" + baseName + ", T>(visitor: V) throws -> T where T == V.T {" + "\n")
     str.append("\t\t" + "fatalError()" + "\n")
     str.append("\t" + "}" + "\n")
     str.append("\n")
-    str.append("\t" + "static func == (lhs: Expr, rhs: Expr) -> Bool {" + "\n")
+    str.append("\t" + "static func == (lhs: " + baseName + ", rhs: " + baseName + ") -> Bool {" + "\n")
     str.append("\t\t" + "lhs.isEqual(to: rhs)" + "\n")
     str.append("\t" + "}" + "\n")
     str.append("\n")
-    str.append("\t" + "func isEqual(to other: Expr) -> Bool {" + "\n")
+    str.append("\t" + "func isEqual(to other: " + baseName + ") -> Bool {" + "\n")
     str.append("\t\t" + "fatalError()" + "\n")
     str.append("\t" + "}" + "\n")
     str.append("}" + "\n")
@@ -64,11 +69,11 @@ func defineType(_ baseName: String, _ className: String, _ fields: String) -> St
     }
     str.append("\t" + "}" + "\n")
     str.append("\n")
-    str.append("\t" + "override func accept<V: Visitor, T>(visitor: V) throws -> T where T == V.T {" + "\n")
+    str.append("\t" + "override func accept<V: Visitor" + baseName + ", T>(visitor: V) throws -> T where T == V.T {" + "\n")
     str.append("\t\t" + "try visitor.visit" + className + baseName + "(self)" + "\n")
     str.append("\t" + "}" + "\n")
     str.append("\n")
-    str.append("\t" + "override func isEqual(to other: Expr) -> Bool {" + "\n")
+    str.append("\t" + "override func isEqual(to other: " + baseName + ") -> Bool {" + "\n")
     str.append("\t\t" + "guard let other = other as? " + className + " else { return false }" + "\n")
     str.append("\t\t" + "return ")
     for (index, field) in fields.components(separatedBy: ", ").enumerated() {
@@ -88,7 +93,7 @@ func defineType(_ baseName: String, _ className: String, _ fields: String) -> St
 }
 
 func defineVisitor(_ baseName: String, _ types: [String]) -> String {
-    var str = "protocol Visitor {" + "\n"
+    var str = "protocol Visitor" + baseName + "{" + "\n"
     str.append("\n")
     str.append("\t" + "associatedtype T" + "\n")
     str.append("\n")
