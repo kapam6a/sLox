@@ -13,11 +13,17 @@ struct RuntimeError: Error {
 }
 
 final class Interpreter {
+    
+    private let printer: Printer
+    
+    init(_ printer: Printer = StandardPrinter()) {
+        self.printer = printer
+    }
 
     func interpret(_ expr: Expr) {
         do {
             let value = try evaluate(expr)
-            print(stringify(value))
+            printer.print(stringify(value))
         } catch {
             let error = error as! RuntimeError
             Lox.error(error)
@@ -70,7 +76,7 @@ extension Interpreter: Visitor {
     }
     
     func visitGroupingExpr(_ expr: Grouping) throws -> Any? {
-        try expr.expressions.map(evaluate).last
+        try expr.expressions.map { try evaluate($0) as Any }.last
     }
     
     func visitLiteralExpr(_ expr: Literal) throws -> Any? {
@@ -83,7 +89,7 @@ extension Interpreter: Visitor {
     }
     
     func visitUnaryExpr(_ expr: Unary) throws -> Any? {
-        let right = try evaluate(expr)
+        let right = try evaluate(expr.right)
         switch expr.operator.type {
         case .minus:
             try checkNumberOperand(expr.operator, right)

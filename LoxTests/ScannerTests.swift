@@ -7,7 +7,7 @@
 
 import XCTest
 
-class ScannerTests: XCTestCase {
+final class ScannerTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

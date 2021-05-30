@@ -7,7 +7,7 @@
 
 import XCTest
 
-class ParserTests: XCTestCase {
+final class ParserTests: XCTestCase {
     
     private var errorReporter: ErrorReporterMock!
     

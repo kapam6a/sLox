@@ -35,6 +35,13 @@
 		3CF769492662742C00A99096 /* StandardErrorReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7693D2662736800A99096 /* StandardErrorReporter.swift */; };
 		3CF7694F2662745D00A99096 /* ErrorReporterMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7694E2662745D00A99096 /* ErrorReporterMock.swift */; };
 		3CF76958266295C900A99096 /* Interpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF76957266295C900A99096 /* Interpreter.swift */; };
+		3CF7695C2663657300A99096 /* Interpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF76957266295C900A99096 /* Interpreter.swift */; };
+		3CF76961266366F600A99096 /* InterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF76960266366F600A99096 /* InterpreterTests.swift */; };
+		3CF76966266369BA00A99096 /* Printer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF76965266369BA00A99096 /* Printer.swift */; };
+		3CF7696B26636A1700A99096 /* StandardPrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7696A26636A1700A99096 /* StandardPrinter.swift */; };
+		3CF7697026636AD000A99096 /* PrinterMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7696F26636AD000A99096 /* PrinterMock.swift */; };
+		3CF7697426636B4900A99096 /* Printer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF76965266369BA00A99096 /* Printer.swift */; };
+		3CF7697826636B4C00A99096 /* StandardPrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7696A26636A1700A99096 /* StandardPrinter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -81,6 +88,10 @@
 		3CF7693D2662736800A99096 /* StandardErrorReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardErrorReporter.swift; sourceTree = "<group>"; };
 		3CF7694E2662745D00A99096 /* ErrorReporterMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorReporterMock.swift; sourceTree = "<group>"; };
 		3CF76957266295C900A99096 /* Interpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interpreter.swift; sourceTree = "<group>"; };
+		3CF76960266366F600A99096 /* InterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpreterTests.swift; sourceTree = "<group>"; };
+		3CF76965266369BA00A99096 /* Printer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Printer.swift; sourceTree = "<group>"; };
+		3CF7696A26636A1700A99096 /* StandardPrinter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardPrinter.swift; sourceTree = "<group>"; };
+		3CF7696F26636AD000A99096 /* PrinterMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrinterMock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +162,7 @@
 				3C33E09C265D39B700EF1612 /* ScannerTests.swift */,
 				3CF7692B26621BB900A99096 /* ParserTests.swift */,
 				3C33E09E265D39B700EF1612 /* Info.plist */,
+				3CF76960266366F600A99096 /* InterpreterTests.swift */,
 			);
 			path = LoxTests;
 			sourceTree = "<group>";
@@ -187,6 +199,8 @@
 			children = (
 				3C33E0CF265E704400EF1612 /* AstPrinter.swift */,
 				3CF76915265FDE0500A99096 /* RpnAstPrinter.swift */,
+				3CF76965266369BA00A99096 /* Printer.swift */,
+				3CF7696A26636A1700A99096 /* StandardPrinter.swift */,
 			);
 			path = Printer;
 			sourceTree = "<group>";
@@ -204,6 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				3CF7694E2662745D00A99096 /* ErrorReporterMock.swift */,
+				3CF7696F26636AD000A99096 /* PrinterMock.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -330,7 +345,9 @@
 				3C33E08E265BE0DB00EF1612 /* TokenType.swift in Sources */,
 				3CF76916265FDE0500A99096 /* RpnAstPrinter.swift in Sources */,
 				3CF76936266272F900A99096 /* ErrorReporter.swift in Sources */,
+				3CF76966266369BA00A99096 /* Printer.swift in Sources */,
 				3C33E083265BBF3300EF1612 /* main.swift in Sources */,
+				3CF7696B26636A1700A99096 /* StandardPrinter.swift in Sources */,
 				3C33E08B265BC88200EF1612 /* Lox.swift in Sources */,
 				3CF769272660FE8200A99096 /* Parser.swift in Sources */,
 				3CF7693E2662736800A99096 /* StandardErrorReporter.swift in Sources */,
@@ -344,13 +361,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CF7695C2663657300A99096 /* Interpreter.swift in Sources */,
 				3CF769492662742C00A99096 /* StandardErrorReporter.swift in Sources */,
+				3CF7697426636B4900A99096 /* Printer.swift in Sources */,
 				3CF7690D265FDA7100A99096 /* AstPrinter.swift in Sources */,
 				3CF7694F2662745D00A99096 /* ErrorReporterMock.swift in Sources */,
 				3C33E0A9265D3BE100EF1612 /* TokenType.swift in Sources */,
 				3CF769452662742000A99096 /* ErrorReporter.swift in Sources */,
 				3CF76909265FDA3C00A99096 /* AstPrinterTests.swift in Sources */,
 				3C33E09D265D39B700EF1612 /* ScannerTests.swift in Sources */,
+				3CF7697826636B4C00A99096 /* StandardPrinter.swift in Sources */,
 				3CF76911265FDABD00A99096 /* Expr.swift in Sources */,
 				3CF7692C26621BB900A99096 /* ParserTests.swift in Sources */,
 				3C33E0A6265D3BDE00EF1612 /* Lox.swift in Sources */,
@@ -358,6 +378,8 @@
 				3CF7693026621C2600A99096 /* Parser.swift in Sources */,
 				3C33E0AC265D3BE400EF1612 /* Token.swift in Sources */,
 				3CF7691F265FE00100A99096 /* RpnAstPrinterTests.swift in Sources */,
+				3CF76961266366F600A99096 /* InterpreterTests.swift in Sources */,
+				3CF7697026636AD000A99096 /* PrinterMock.swift in Sources */,
 				3CF7691A265FDE0800A99096 /* RpnAstPrinter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

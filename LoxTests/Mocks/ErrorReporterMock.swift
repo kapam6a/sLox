@@ -13,4 +13,9 @@ final class ErrorReporterMock: ErrorReporter {
     func report(_ line: Int, _ where: String, _ message: String) {
         reportArgs = (line, `where`, message)
     }
+    
+    var reportArg: String?
+    func report(_ messsage: String) {
+        reportArg = messsage
+    }
 }
