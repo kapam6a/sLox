@@ -857,4 +857,21 @@ final class InterpreterTests: XCTestCase {
         XCTAssertEqual(printer.message, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
+    
+    func testInterpret_concatenateStringAndNumber_printsOutCombinedString() {
+        
+        // given
+        let expr = Binary(
+            left: Literal(value: .string("Moscow")),
+            operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+            right: Literal(value: .number(4.33))
+        )
+        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(printer.message, "Moscow4.33")
+        XCTAssertFalse(Lox.hadRuntimeError)
+    }
 }

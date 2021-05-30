@@ -134,8 +134,9 @@ private extension Interpreter {
     
     func addOperands(_ token: Token, _ left: Any?, _ right: Any?) throws -> Any {
         switch (left, right) {
-        case (let left as String, let right as String): return left + right
-        case (let left as Double, let right as Double): return left + right
+        case (let l as Double, let r as Double): return l + r
+        case (let l as String, let r as CustomStringConvertible): return l + r.description
+        case (let l as CustomStringConvertible, let r as String): return l.description + r
         default: throw RuntimeError(operator: token,
                                     message: "Operands must be two numbers or two strings.")
         }
