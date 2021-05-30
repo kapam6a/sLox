@@ -42,7 +42,7 @@ extension Interpreter: Visitor {
             try checkNumberOperands(expr.operator, left, right)
             return (left as! Double) - (right as! Double)
         case .slash:
-            try checkNumberOperands(expr.operator, left, right)
+            try checkDivisionOperands(expr.operator, left, right)
             return (left as! Double) / (right as! Double)
         case .star:
             try checkNumberOperands(expr.operator, left, right)
@@ -156,6 +156,14 @@ private extension Interpreter {
     func checkNumberOperand(_ token: Token, _ object: Any?) throws {
         if object is Double { return }
         throw RuntimeError(operator: token, message: "Operand must be a number.")
+    }
+    
+    func checkDivisionOperands(_ token: Token, _ left: Any?, _ right: Any?) throws {
+        if left is Double, let right = right as? Double  {
+            if right != 0 { return }
+            throw RuntimeError(operator: token, message: "Division by zero is prohibited.")
+        }
+        throw RuntimeError(operator: token, message: "Operands must be a number.")
     }
     
     func checkNumberOperands(_ token: Token, _ left: Any?, _ right: Any?) throws {

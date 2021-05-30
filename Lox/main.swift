@@ -7,6 +7,8 @@
 
 import Foundation
 
+print(0/0)
+
 if CommandLine.arguments.count > 2 {
     print("Usage: lox [script]")
     exit(64)

@@ -874,4 +874,21 @@ final class InterpreterTests: XCTestCase {
         XCTAssertEqual(printer.message, "Moscow4.33")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
+    
+    func testInterpret_divisionByZero_reportsRuntimeError() {
+        
+        // given
+        let expr = Binary(
+            left: Literal(value: .number(20)),
+            operator: Token(type: .slash, lexeme: "/", literal: nil, line: 1),
+            right: Literal(value: .number(0))
+        )
+        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(printer.message, nil)
+        XCTAssertTrue(Lox.hadRuntimeError)
+    }
 }
