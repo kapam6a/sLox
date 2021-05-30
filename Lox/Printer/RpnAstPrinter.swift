@@ -10,36 +10,39 @@ import Foundation
 final class RpnAstPrinter: Visitor {
     
     func print(_ expr: Expr) -> String {
-        expr.accept(visitor: self)
+        try! expr.accept(visitor: self)
     }
     
-    func visitBinaryExpr(_ expr: Binary) -> String {
-        format(expr.operator.lexeme, [expr.left, expr.right])
+    func visitBinaryExpr(_ expr: Binary) throws -> String {
+        try format(expr.operator.lexeme, [expr.left, expr.right])
     }
     
-    func visitGroupingExpr(_ expr: Grouping) -> String {
-        format(nil, expr.expressions)
+    func visitGroupingExpr(_ expr: Grouping) throws -> String {
+        try format(nil, expr.expressions)
     }
     
-    func visitLiteralExpr(_ expr: Literal) -> String {
+    func visitLiteralExpr(_ expr: Literal) throws -> String {
         if expr.value == nil { return "nil" }
         return expr.value!.description
     }
     
-    func visitUnaryExpr(_ expr: Unary) -> String {
-        format(expr.operator.lexeme, [expr.right])
+    func visitUnaryExpr(_ expr: Unary) throws -> String {
+        try format(expr.operator.lexeme, [expr.right])
     }
 }
 
 private extension RpnAstPrinter {
     
-    func format(_ name: String?, _ exprs: [Expr]) -> String {
+    func format(_ name: String?, _ exprs: [Expr]) throws -> String {
         var str = ""
         if exprs.count == 1 {
-            str.append(exprs[0].accept(visitor: self))
+            str.append(try exprs[0].accept(visitor: self))
             name.map { str.append(" " + $0) }
         } else {
-            exprs.forEach { str.append($0.accept(visitor: self) + " ") }
+            try exprs.forEach {
+                let expr = try $0.accept(visitor: self)
+                str.append(expr + " ")
+            }
             name.map { str.append($0) }
         }
         return str

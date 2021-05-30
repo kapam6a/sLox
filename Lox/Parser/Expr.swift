@@ -1,5 +1,5 @@
 class Expr: Equatable {
-	func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
+	func accept<V: Visitor, T>(visitor: V) throws -> T where T == V.T {
 		fatalError()
 	}
 
@@ -16,10 +16,10 @@ protocol Visitor {
 
 	associatedtype T
 
-	func visitBinaryExpr( _ expr: Binary) -> T
-	func visitGroupingExpr( _ expr: Grouping) -> T
-	func visitLiteralExpr( _ expr: Literal) -> T
-	func visitUnaryExpr( _ expr: Unary) -> T
+	func visitBinaryExpr( _ expr: Binary) throws -> T
+	func visitGroupingExpr( _ expr: Grouping) throws -> T
+	func visitLiteralExpr( _ expr: Literal) throws -> T
+	func visitUnaryExpr( _ expr: Unary) throws -> T
 }
 
 final class Binary: Expr {
@@ -34,8 +34,8 @@ final class Binary: Expr {
 		self.right = right
 	}
 
-	override func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
-		visitor.visitBinaryExpr(self)
+	override func accept<V: Visitor, T>(visitor: V) throws -> T where T == V.T {
+		try visitor.visitBinaryExpr(self)
 	}
 
 	override func isEqual(to other: Expr) -> Bool {
@@ -54,8 +54,8 @@ final class Grouping: Expr {
 		self.expressions = expressions
 	}
 
-	override func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
-		visitor.visitGroupingExpr(self)
+	override func accept<V: Visitor, T>(visitor: V) throws -> T where T == V.T {
+		try visitor.visitGroupingExpr(self)
 	}
 
 	override func isEqual(to other: Expr) -> Bool {
@@ -72,8 +72,8 @@ final class Literal: Expr {
 		self.value = value
 	}
 
-	override func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
-		visitor.visitLiteralExpr(self)
+	override func accept<V: Visitor, T>(visitor: V) throws -> T where T == V.T {
+		try visitor.visitLiteralExpr(self)
 	}
 
 	override func isEqual(to other: Expr) -> Bool {
@@ -92,8 +92,8 @@ final class Unary: Expr {
 		self.right = right
 	}
 
-	override func accept<V: Visitor, T>(visitor: V) -> T where T == V.T {
-		visitor.visitUnaryExpr(self)
+	override func accept<V: Visitor, T>(visitor: V) throws -> T where T == V.T {
+		try visitor.visitUnaryExpr(self)
 	}
 
 	override func isEqual(to other: Expr) -> Bool {
