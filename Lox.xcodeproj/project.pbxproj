@@ -34,6 +34,7 @@
 		3CF769452662742000A99096 /* ErrorReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF76935266272F900A99096 /* ErrorReporter.swift */; };
 		3CF769492662742C00A99096 /* StandardErrorReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7693D2662736800A99096 /* StandardErrorReporter.swift */; };
 		3CF7694F2662745D00A99096 /* ErrorReporterMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7694E2662745D00A99096 /* ErrorReporterMock.swift */; };
+		3CF76958266295C900A99096 /* Interpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF76957266295C900A99096 /* Interpreter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -79,6 +80,7 @@
 		3CF76935266272F900A99096 /* ErrorReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorReporter.swift; sourceTree = "<group>"; };
 		3CF7693D2662736800A99096 /* StandardErrorReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardErrorReporter.swift; sourceTree = "<group>"; };
 		3CF7694E2662745D00A99096 /* ErrorReporterMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorReporterMock.swift; sourceTree = "<group>"; };
+		3CF76957266295C900A99096 /* Interpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interpreter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +137,7 @@
 				3C33E0BA265E39D100EF1612 /* Scanner */,
 				3C33E0BB265E39E600EF1612 /* Parser */,
 				3C33E0CE265E702D00EF1612 /* Printer */,
+				3CF76956266295B100A99096 /* Interpreter */,
 			);
 			path = Lox;
 			sourceTree = "<group>";
@@ -203,6 +206,14 @@
 				3CF7694E2662745D00A99096 /* ErrorReporterMock.swift */,
 			);
 			path = Mocks;
+			sourceTree = "<group>";
+		};
+		3CF76956266295B100A99096 /* Interpreter */ = {
+			isa = PBXGroup;
+			children = (
+				3CF76957266295C900A99096 /* Interpreter.swift */,
+			);
+			path = Interpreter;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -314,6 +325,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CF76958266295C900A99096 /* Interpreter.swift in Sources */,
 				3C33E0D0265E704400EF1612 /* AstPrinter.swift in Sources */,
 				3C33E08E265BE0DB00EF1612 /* TokenType.swift in Sources */,
 				3CF76916265FDE0500A99096 /* RpnAstPrinter.swift in Sources */,

@@ -10,4 +10,5 @@ import Foundation
 protocol ErrorReporter {
     
     func report(_ line: Int, _ where: String, _ message: String)
+    func report(_ messsage: String)
 }

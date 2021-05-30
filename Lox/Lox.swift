@@ -10,6 +10,8 @@ import Foundation
 final class Lox {
     
     static var hadError = false
+    static var hadRuntimeError = false
+    static let interpreter = Interpreter()
     
     static var errorReporter: ErrorReporter = StandardErrorReporter()
     
@@ -17,6 +19,7 @@ final class Lox {
         let sourceCode = try! String(contentsOf: URL(fileURLWithPath: filePath))
         Lox.run(sourceCode)
         if hadError { exit(65) }
+        if hadRuntimeError  { exit(70) }
     }
 
     static func runPromt() {
@@ -33,7 +36,8 @@ final class Lox {
         let tokens = scanner.scanTokens()
         let parser = Parser(tokens)
         let expr = parser.parse()
-        expr.map { print(AstPrinter().print($0)) }
+        if hadError { return }
+        interpreter.interpret(expr!)
     }
     
     static func error(_ line: Int, _ message: String) {
@@ -48,5 +52,10 @@ final class Lox {
             errorReporter.report(token.line, " at '" + token.lexeme + "'", message)
         }
         hadError = true
+    }
+    
+    static func error(_ error: RuntimeError) {
+        errorReporter.report(error.message + "\n[line " + String(error.operator.line) + "]")
+        hadRuntimeError = true
     }
 }

@@ -13,4 +13,9 @@ final class StandardErrorReporter: ErrorReporter {
         let data = "[line \(line) ] Error \(`where`): \(message)".data(using: .utf8)
         FileHandle.standardError.write(data!)
     }
+    
+    func report(_ messsage: String) {
+        let data = messsage.data(using: .utf8)
+        FileHandle.standardError.write(data!)
+    }
 }
