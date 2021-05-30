@@ -48,13 +48,12 @@ extension Interpreter: Visitor {
             try checkNumberOperands(expr.operator, left, right)
             return (left as! Double) * (right as! Double)
         case .plus:
-            if let leftStr = left as? String, let rightStr = right as? String {
-                return leftStr + rightStr
-            } else if let leftNum = left as? Double, let rightNum = right as? Double {
-                return leftNum + rightNum
+            switch (left, right) {
+            case (let left as String, let right as String): return left + right
+            case (let left as Double, let right as Double): return left + right
+            default: throw RuntimeError(operator: expr.operator,
+                                        message: "Operands must be two numbers or two strings.")
             }
-            throw RuntimeError(operator: expr.operator,
-                               message: "Operands must be two numbers or two strings.")
         case .greater:
             try checkNumberOperands(expr.operator, left, right)
             return (left as! Double) > (right as! Double)
@@ -132,18 +131,14 @@ private extension Interpreter {
     }
     
     func isEqual(_ left: Any?, _ right: Any?) -> Bool {
-        if left == nil, right == nil { return true }
-        if left == nil { return false }
-        if let leftStr = left as? String, let rightStr = right as? String {
-            return leftStr == rightStr
+        switch (left, right) {
+        case (nil, nil): return true
+        case (nil, _): return false
+        case (let left as String, let right as String): return left == right
+        case (let left as Bool, let right as Bool): return left == right
+        case (let left as Double, let right as Double): return left == right
+        default: return false
         }
-        if let leftStr = left as? Bool, let rightStr = right as? Bool {
-            return leftStr == rightStr
-        }
-        if let leftStr = left as? Double, let rightStr = right as? Double {
-            return leftStr == rightStr
-        }
-        return false
     }
     
     func checkNumberOperand(_ token: Token, _ object: Any?) throws {
