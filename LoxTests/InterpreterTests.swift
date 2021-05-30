@@ -755,4 +755,106 @@ final class InterpreterTests: XCTestCase {
         XCTAssertEqual(printer.message, "9")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
+    
+    func testInterpret_oneStringLessThanAnother_printsOutResult() {
+        
+        // given
+        let expr = Binary(
+            left: Literal(value: .string("a")),
+            operator: Token(type: .less, lexeme: "<", literal: nil, line: 1),
+            right: Literal(value: .string("b"))
+        )
+        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(printer.message, "true")
+        XCTAssertFalse(Lox.hadRuntimeError)
+    }
+    
+    func testInterpret_oneStringLessEqualThanAnother_printsOutResult() {
+        
+        // given
+        let expr = Binary(
+            left: Literal(value: .string("a")),
+            operator: Token(type: .lessEqual, lexeme: "<=", literal: nil, line: 1),
+            right: Literal(value: .string("b"))
+        )
+        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(printer.message, "true")
+        XCTAssertFalse(Lox.hadRuntimeError)
+    }
+    
+    func testInterpret_oneStringGreateThanAnother_printsOutResult() {
+        
+        // given
+        let expr = Binary(
+            left: Literal(value: .string("a")),
+            operator: Token(type: .greater, lexeme: ">", literal: nil, line: 1),
+            right: Literal(value: .string("b"))
+        )
+        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(printer.message, "false")
+        XCTAssertFalse(Lox.hadRuntimeError)
+    }
+    
+    func testInterpret_oneStringGreaterOrEqualThanAnother_printsOutResult() {
+        
+        // given
+        let expr = Binary(
+            left: Literal(value: .string("a")),
+            operator: Token(type: .greaterEqual, lexeme: ">=", literal: nil, line: 1),
+            right: Literal(value: .string("b"))
+        )
+        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(printer.message, "false")
+        XCTAssertFalse(Lox.hadRuntimeError)
+    }
+    
+    func testInterpret_greaterOrEqualTwoIdenticalStrings_printsOutTrue() {
+        
+        // given
+        let expr = Binary(
+            left: Literal(value: .string("a")),
+            operator: Token(type: .greaterEqual, lexeme: ">=", literal: nil, line: 1),
+            right: Literal(value: .string("a"))
+        )
+        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(printer.message, "true")
+        XCTAssertFalse(Lox.hadRuntimeError)
+    }
+    
+    func testInterpret_lessOrEqualTwoIdenticalStrings_printsOutTrue() {
+        
+        // given
+        let expr = Binary(
+            left: Literal(value: .string("a")),
+            operator: Token(type: .lessEqual, lexeme: "<=", literal: nil, line: 1),
+            right: Literal(value: .string("a"))
+        )
+        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(printer.message, "true")
+        XCTAssertFalse(Lox.hadRuntimeError)
+    }
 }

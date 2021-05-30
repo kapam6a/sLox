@@ -48,24 +48,15 @@ extension Interpreter: Visitor {
             try checkNumberOperands(expr.operator, left, right)
             return (left as! Double) * (right as! Double)
         case .plus:
-            switch (left, right) {
-            case (let left as String, let right as String): return left + right
-            case (let left as Double, let right as Double): return left + right
-            default: throw RuntimeError(operator: expr.operator,
-                                        message: "Operands must be two numbers or two strings.")
-            }
+            return try addOperands(expr.operator, left, right)
         case .greater:
-            try checkNumberOperands(expr.operator, left, right)
-            return (left as! Double) > (right as! Double)
+            return try compareOperands(expr.operator, left, right)
         case .greaterEqual:
-            try checkNumberOperands(expr.operator, left, right)
-            return (left as! Double) >= (right as! Double)
+            return try compareOperands(expr.operator, left, right)
         case .less:
-            try checkNumberOperands(expr.operator, left, right)
-            return (left as! Double) < (right as! Double)
+            return try compareOperands(expr.operator, left, right)
         case .lessEqual:
-            try checkNumberOperands(expr.operator, left, right)
-            return (left as! Double) <= (right as! Double)
+            return try compareOperands(expr.operator, left, right)
         case .bangEqual:
             return !isEqual(left, right)
         case .equalEqual:
@@ -138,6 +129,38 @@ private extension Interpreter {
         case (let left as Bool, let right as Bool): return left == right
         case (let left as Double, let right as Double): return left == right
         default: return false
+        }
+    }
+    
+    func addOperands(_ token: Token, _ left: Any?, _ right: Any?) throws -> Any {
+        switch (left, right) {
+        case (let left as String, let right as String): return left + right
+        case (let left as Double, let right as Double): return left + right
+        default: throw RuntimeError(operator: token,
+                                    message: "Operands must be two numbers or two strings.")
+        }
+    }
+    
+    func compareOperands(_ token: Token, _ left: Any?, _ right: Any?) throws -> Bool {
+        switch (left, right) {
+        case (let left as String, let right as String):
+            switch token.type {
+            case .less: return left < right
+            case .lessEqual: return left <= right
+            case .greater: return left > right
+            case .greaterEqual: return left >= right
+            default: fatalError()
+            }
+        case (let left as Double, let right as Double):
+            switch token.type {
+            case .less: return left < right
+            case .lessEqual: return left <= right
+            case .greater: return left > right
+            case .greaterEqual: return left >= right
+            default: fatalError()
+            }
+        default: throw RuntimeError(operator: token,
+                                    message: "Operands must be a number or string.")
         }
     }
     
