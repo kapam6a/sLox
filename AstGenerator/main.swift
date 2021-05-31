@@ -39,7 +39,7 @@ func defineAst(_ outputDir: String, _ baseName: String, _ types: [String]) {
 
 func defineExpr(_ baseName: String) -> String {
     var str = "class " + baseName + ": Equatable {" + "\n"
-    str.append("\t" + "func accept<V: Visitor" + baseName + ", T>(visitor: V) throws -> T where T == V.T {" + "\n")
+    str.append("\t" + "func accept<V: Visitor" + baseName + ", T>(visitor: V) throws -> T where T == V." + baseName + "Return {" + "\n")
     str.append("\t\t" + "fatalError()" + "\n")
     str.append("\t" + "}" + "\n")
     str.append("\n")
@@ -69,7 +69,7 @@ func defineType(_ baseName: String, _ className: String, _ fields: String) -> St
     }
     str.append("\t" + "}" + "\n")
     str.append("\n")
-    str.append("\t" + "override func accept<V: Visitor" + baseName + ", T>(visitor: V) throws -> T where T == V.T {" + "\n")
+    str.append("\t" + "override func accept<V: Visitor" + baseName + ", T>(visitor: V) throws -> T where T == V." + baseName + "Return {" + "\n")
     str.append("\t\t" + "try visitor.visit" + className + baseName + "(self)" + "\n")
     str.append("\t" + "}" + "\n")
     str.append("\n")
@@ -95,11 +95,11 @@ func defineType(_ baseName: String, _ className: String, _ fields: String) -> St
 func defineVisitor(_ baseName: String, _ types: [String]) -> String {
     var str = "protocol Visitor" + baseName + "{" + "\n"
     str.append("\n")
-    str.append("\t" + "associatedtype T" + "\n")
+    str.append("\t" + "associatedtype " + baseName + "Return" + "\n")
     str.append("\n")
     types.forEach {
         let className = $0.components(separatedBy: "::")[0].trimmingCharacters(in: .whitespaces)
-        str.append("\t" + "func visit" + className + baseName + "( _ " + baseName.lowercased() + ": " + className + ") throws -> T" + "\n")
+        str.append("\t" + "func visit" + className + baseName + "( _ " + baseName.lowercased() + ": " + className + ") throws -> " + baseName + "Return" + "\n")
     }
     str.append("}" + "\n")
     str.append("\n")

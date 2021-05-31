@@ -20,14 +20,31 @@ final class Interpreter {
         self.printer = printer
     }
 
-    func interpret(_ expr: Expr) {
+    func interpret(_ stmts: [Stmt]) {
         do {
-            let value = try evaluate(expr)
-            printer.print(stringify(value))
+            try stmts.forEach { try execute($0) }
         } catch {
-            let error = error as! RuntimeError
-            Lox.error(error)
+            Lox.error(error as! RuntimeError)
         }
+    }
+}
+
+extension Interpreter: VisitorStmt {
+    
+    func visitExpressionStmt( _ stmt: Expression) throws -> Void {
+        _ = try evaluate(stmt.expression)
+    }
+    
+    func visitPrintStmt( _ stmt: Print) throws -> Void {
+        let value = try evaluate(stmt.expression)
+        printer.print(stringify(value))
+    }
+}
+
+private extension Interpreter {
+    
+    func execute(_ stmt: Stmt) throws {
+        try stmt.accept(visitor: self)
     }
 }
 

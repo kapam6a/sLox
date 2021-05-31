@@ -35,9 +35,9 @@ final class Lox {
         let scanner = Scanner(sourceCode)
         let tokens = scanner.scanTokens()
         let parser = Parser(tokens)
-        let expr = parser.parse()
+        let stmts = parser.parse()
         if hadError { return }
-        interpreter.interpret(expr!)
+        interpreter.interpret(stmts)
     }
     
     static func error(_ line: Int, _ message: String) {

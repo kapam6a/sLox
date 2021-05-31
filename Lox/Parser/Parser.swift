@@ -18,12 +18,32 @@ final class Parser {
         self.tokens = tokens
     }
     
-    func parse() -> Expr? {
-        do {
-            return try expression()
-        } catch {
-            return nil
+    func parse() -> [Stmt] {
+        var statements: [Stmt] = []
+        while (!isAtEnd()) {
+            statements.append(try! statement())
         }
+        return statements
+    }
+}
+
+private extension Parser {
+    
+    func statement() throws -> Stmt {
+        if match(.print) { return try printStatement() }
+        return try expressionStatement()
+    }
+    
+    func printStatement() throws -> Stmt {
+        let expr = try expression()
+        try consume(.semicolon, "Expect ';' after value.")
+        return Print(expression: expr)
+    }
+    
+    func expressionStatement() throws -> Stmt {
+        let expr = try expression()
+        try consume(.semicolon, "Expect ';' after value.")
+        return Expression(expression: expr)
     }
 }
 

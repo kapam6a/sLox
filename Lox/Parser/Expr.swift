@@ -1,5 +1,5 @@
 class Expr: Equatable {
-	func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.T {
+	func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.ExprReturn {
 		fatalError()
 	}
 
@@ -14,12 +14,12 @@ class Expr: Equatable {
 
 protocol VisitorExpr{
 
-	associatedtype T
+	associatedtype ExprReturn
 
-	func visitBinaryExpr( _ expr: Binary) throws -> T
-	func visitGroupingExpr( _ expr: Grouping) throws -> T
-	func visitLiteralExpr( _ expr: Literal) throws -> T
-	func visitUnaryExpr( _ expr: Unary) throws -> T
+	func visitBinaryExpr( _ expr: Binary) throws -> ExprReturn
+	func visitGroupingExpr( _ expr: Grouping) throws -> ExprReturn
+	func visitLiteralExpr( _ expr: Literal) throws -> ExprReturn
+	func visitUnaryExpr( _ expr: Unary) throws -> ExprReturn
 }
 
 final class Binary: Expr {
@@ -34,7 +34,7 @@ final class Binary: Expr {
 		self.right = right
 	}
 
-	override func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.T {
+	override func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.ExprReturn {
 		try visitor.visitBinaryExpr(self)
 	}
 
@@ -54,7 +54,7 @@ final class Grouping: Expr {
 		self.expressions = expressions
 	}
 
-	override func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.T {
+	override func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.ExprReturn {
 		try visitor.visitGroupingExpr(self)
 	}
 
@@ -72,7 +72,7 @@ final class Literal: Expr {
 		self.value = value
 	}
 
-	override func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.T {
+	override func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.ExprReturn {
 		try visitor.visitLiteralExpr(self)
 	}
 
@@ -92,7 +92,7 @@ final class Unary: Expr {
 		self.right = right
 	}
 
-	override func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.T {
+	override func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.ExprReturn {
 		try visitor.visitUnaryExpr(self)
 	}
 

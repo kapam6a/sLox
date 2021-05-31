@@ -1,5 +1,5 @@
 class Stmt: Equatable {
-	func accept<V: VisitorStmt, T>(visitor: V) throws -> T where T == V.T {
+	func accept<V: VisitorStmt, T>(visitor: V) throws -> T where T == V.StmtReturn {
 		fatalError()
 	}
 
@@ -14,10 +14,10 @@ class Stmt: Equatable {
 
 protocol VisitorStmt{
 
-	associatedtype T
+	associatedtype StmtReturn
 
-	func visitExpressionStmt( _ stmt: Expression) throws -> T
-	func visitPrintStmt( _ stmt: Print) throws -> T
+	func visitExpressionStmt( _ stmt: Expression) throws -> StmtReturn
+	func visitPrintStmt( _ stmt: Print) throws -> StmtReturn
 }
 
 final class Expression: Stmt {
@@ -28,7 +28,7 @@ final class Expression: Stmt {
 		self.expression = expression
 	}
 
-	override func accept<V: VisitorStmt, T>(visitor: V) throws -> T where T == V.T {
+	override func accept<V: VisitorStmt, T>(visitor: V) throws -> T where T == V.StmtReturn {
 		try visitor.visitExpressionStmt(self)
 	}
 
@@ -46,7 +46,7 @@ final class Print: Stmt {
 		self.expression = expression
 	}
 
-	override func accept<V: VisitorStmt, T>(visitor: V) throws -> T where T == V.T {
+	override func accept<V: VisitorStmt, T>(visitor: V) throws -> T where T == V.StmtReturn {
 		try visitor.visitPrintStmt(self)
 	}
 
