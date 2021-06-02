@@ -15,6 +15,7 @@ struct RuntimeError: Error {
 final class Interpreter {
     
     private let printer: Printer
+    private var environment: Environment = Environment()
     
     init(_ printer: Printer = StandardPrinter()) {
         self.printer = printer
@@ -31,6 +32,18 @@ final class Interpreter {
 
 extension Interpreter: VisitorStmt {
     
+    func visitBlockStmt(_ stmt: Block) throws -> () {
+        try executeBlock(stmt.statements, Environment())
+    }
+    
+    func visitVarStmt(_ stmt: Var) throws -> () {
+        var value: Any?
+        if stmt.initializer != nil {
+            value = try evaluate(stmt.initializer!)
+        }
+        environment.define(stmt.name.lexeme, value)
+    }
+    
     func visitExpressionStmt( _ stmt: Expression) throws -> Void {
         _ = try evaluate(stmt.expression)
     }
@@ -46,9 +59,28 @@ private extension Interpreter {
     func execute(_ stmt: Stmt) throws {
         try stmt.accept(visitor: self)
     }
+    
+    func executeBlock(_ stmts: [Stmt], _ environment: Environment) throws {
+        let previous = self.environment
+        defer {
+            self.environment = previous
+        }
+        self.environment = environment
+        try stmts.forEach { try execute($0) }
+    }
 }
 
 extension Interpreter: VisitorExpr {
+    
+    func visitAssignExpr(_ expr: Assign) throws -> Any? {
+        let value = try evaluate(expr)
+        try environment.assign(expr.name, value)
+        return value
+    }
+    
+    func visitVariableExpr(_ expr: Variable) throws -> Any? {
+        try environment.get(expr.name)
+    }
     
     func visitBinaryExpr(_ expr: Binary) throws -> Any? {
         let left = try evaluate(expr.left)

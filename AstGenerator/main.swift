@@ -14,15 +14,19 @@ if CommandLine.arguments.count != 2 {
 let outputDir = CommandLine.arguments[1]
 
 defineAst(outputDir, "Expr", [
+    "Assign   :: name: Token, value: Expr",
     "Binary   :: left: Expr, `operator`: Token, right: Expr",
     "Grouping :: expressions: [Expr]",
     "Literal  :: value: LiteralType?",
-    "Unary    :: `operator`: Token, right: Expr"
+    "Unary    :: `operator`: Token, right: Expr",
+    "Variable :: name: Token "
 ])
 
 defineAst(outputDir, "Stmt", [
+    "Block      :: statements: [Stmt]",
     "Expression :: expression: Expr",
-    "Print      :: expression: Expr"
+    "Print      :: expression: Expr",
+    "Var        :: name: Token , initializer: Expr?"
 ])
 
 func defineAst(_ outputDir: String, _ baseName: String, _ types: [String]) {

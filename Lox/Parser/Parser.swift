@@ -21,7 +21,7 @@ final class Parser {
     func parse() -> [Stmt] {
         var statements: [Stmt] = []
         while (!isAtEnd()) {
-            statements.append(try! statement())
+            declaration().map { statements.append($0) }
         }
         return statements
     }
@@ -29,8 +29,29 @@ final class Parser {
 
 private extension Parser {
     
+    func declaration() -> Stmt? {
+        do {
+            if match(.var) { return try varDeclaration() }
+            return try statement()
+        } catch {
+            synchronize()
+            return nil
+        }
+    }
+    
+    func varDeclaration() throws -> Stmt {
+        let name = try consume(.identifier, "Expect variable name.")
+        var initializer: Expr?
+        if match(.equal) {
+            initializer = try expression()
+        }
+        try consume(.semicolon, "Expect ';' after variable declaration.")
+        return Var(name: name, initializer: initializer)
+    }
+    
     func statement() throws -> Stmt {
         if match(.print) { return try printStatement() }
+        if match(.leftBrace) { return Block(statements: try block()) }
         return try expressionStatement()
     }
     
@@ -38,6 +59,15 @@ private extension Parser {
         let expr = try expression()
         try consume(.semicolon, "Expect ';' after value.")
         return Print(expression: expr)
+    }
+    
+    func block() throws -> [Stmt] {
+        var stmts: [Stmt] = []
+        while !check(.rightBrace) && !isAtEnd()  {
+            stmts.append(try statement())
+        }
+        try consume(.rightBrace, "Expect '}' after block.")
+        return stmts
     }
     
     func expressionStatement() throws -> Stmt {
@@ -50,7 +80,23 @@ private extension Parser {
 private extension Parser {
     
     func expression() throws -> Expr {
-        try equality()
+        try assignment()
+    }
+    
+    func assignment() throws -> Expr {
+        let expr = try equality()
+        
+        if match(.equal) {
+            let equals = previous()
+            let value = try assignment()
+            if let expr = expr as? Variable {
+                let name = expr.name
+                return Assign(name: name, value: value)
+            }
+            _ = error(equals, "Invalid assignment target.")
+        }
+        
+        return expr
     }
     
     func equality() throws -> Expr {
@@ -122,6 +168,7 @@ private extension Parser {
             try consume(.rightParen, "Expect ')' after expression.")
             return Grouping(expressions: exps)
         }
+        if match(.identifier) { return Variable(name: previous()) }
         
         throw error(peek(), "Expect expression.")
     }
@@ -129,6 +176,10 @@ private extension Parser {
 
 
 private extension Parser {
+    
+    func synchronize() {
+        
+    }
     
     func match(_ tokenTypes: TokenType...) -> Bool {
         for type in tokenTypes {

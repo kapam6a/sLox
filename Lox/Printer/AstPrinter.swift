@@ -13,6 +13,14 @@ final class AstPrinter: VisitorExpr {
         try! expr.accept(visitor: self)
     }
     
+    func visitAssignExpr(_ expr: Assign) throws -> String {
+        ""
+    }
+    
+    func visitVariableExpr(_ expr: Variable) throws -> String {
+        ""
+    }
+    
     func visitBinaryExpr(_ expr: Binary) throws -> String {
         try parenthesize(expr.operator.lexeme, [expr.left, expr.right])
     }
