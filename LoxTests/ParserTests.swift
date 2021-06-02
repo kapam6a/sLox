@@ -30,6 +30,7 @@ final class ParserTests: XCTestCase {
         // given
         let sut = Parser(
             [Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -37,7 +38,7 @@ final class ParserTests: XCTestCase {
         let result = sut.parse()
         
         // then
-        XCTAssertEqual(result, Literal(value: .number(23)))
+        XCTAssertEqual(result, [Expression(expression:Literal(value: .number(23)))])
         XCTAssertFalse(Lox.hadError)
     }
     
@@ -46,6 +47,7 @@ final class ParserTests: XCTestCase {
         // given
         let sut = Parser(
             [Token(type: .string, lexeme: "\"Moscow city\"", literal: .string("Moscow city"), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -53,7 +55,7 @@ final class ParserTests: XCTestCase {
         let result = sut.parse()
         
         // then
-        XCTAssertEqual(result, Literal(value: .string("Moscow city")))
+        XCTAssertEqual(result, [Expression(expression:Literal(value: .string("Moscow city")))])
         XCTAssertFalse(Lox.hadError)
     }
     
@@ -62,6 +64,7 @@ final class ParserTests: XCTestCase {
         // given
         let sut = Parser(
             [Token(type: .true, lexeme: "true", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -69,7 +72,7 @@ final class ParserTests: XCTestCase {
         let result = sut.parse()
         
         // then
-        XCTAssertEqual(result, Literal(value: .boolean(true)))
+        XCTAssertEqual(result, [Expression(expression:Literal(value: .boolean(true)))])
         XCTAssertFalse(Lox.hadError)
     }
     
@@ -78,6 +81,7 @@ final class ParserTests: XCTestCase {
         // given
         let sut = Parser(
             [Token(type: .false, lexeme: "false", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -85,7 +89,7 @@ final class ParserTests: XCTestCase {
         let result = sut.parse()
         
         // then
-        XCTAssertEqual(result, Literal(value: .boolean(false)))
+        XCTAssertEqual(result, [Expression(expression:Literal(value: .boolean(false)))])
         XCTAssertFalse(Lox.hadError)
     }
     
@@ -94,6 +98,7 @@ final class ParserTests: XCTestCase {
         // given
         let sut = Parser(
             [Token(type: .nil, lexeme: "nil", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -101,7 +106,7 @@ final class ParserTests: XCTestCase {
         let result = sut.parse()
         
         // then
-        XCTAssertEqual(result, Literal(value: nil))
+        XCTAssertEqual(result, [Expression(expression:Literal(value: nil))])
         XCTAssertFalse(Lox.hadError)
     }
     
@@ -112,6 +117,7 @@ final class ParserTests: XCTestCase {
             [Token(type: .leftParen, lexeme: "(", literal: nil, line: 1),
              Token(type: .nil, lexeme: "nil", literal: nil, line: 1),
              Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -119,7 +125,7 @@ final class ParserTests: XCTestCase {
         let result = sut.parse()
         
         // then
-        XCTAssertEqual(result, Grouping(expressions: [Literal(value: nil)]))
+        XCTAssertEqual(result, [Expression(expression:Grouping(expressions: [Literal(value: nil)]))])
         XCTAssertFalse(Lox.hadError)
     }
     
@@ -129,6 +135,7 @@ final class ParserTests: XCTestCase {
         let sut = Parser(
             [Token(type: .minus, lexeme: "-", literal: nil, line: 1),
              Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -138,10 +145,12 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Unary(
-                operator: Token(type: .minus, lexeme: "-", literal: nil, line: 1),
-                right: Literal(value: .number(23))
-            )
+            [Expression(
+                expression:Unary(
+                    operator: Token(type: .minus, lexeme: "-", literal: nil, line: 1),
+                    right: Literal(value: .number(23))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -152,6 +161,7 @@ final class ParserTests: XCTestCase {
         let sut = Parser(
             [Token(type: .bang, lexeme: "!", literal: nil, line: 1),
              Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -161,10 +171,12 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Unary(
-                operator: Token(type: .bang, lexeme: "!", literal: nil, line: 1),
-                right: Literal(value: .number(23))
-            )
+            [Expression(
+                expression:Unary(
+                    operator: Token(type: .bang, lexeme: "!", literal: nil, line: 1),
+                    right: Literal(value: .number(23))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -176,6 +188,7 @@ final class ParserTests: XCTestCase {
             [Token(type: .bang, lexeme: "!", literal: nil, line: 1),
              Token(type: .bang, lexeme: "!", literal: nil, line: 1),
              Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -185,13 +198,15 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Unary(
-                operator: Token(type: .bang, lexeme: "!", literal: nil, line: 1),
-                right: Unary(
+            [Expression(
+                expression:Unary(
                     operator: Token(type: .bang, lexeme: "!", literal: nil, line: 1),
-                    right: Literal(value: .number(23))
+                    right: Unary(
+                        operator: Token(type: .bang, lexeme: "!", literal: nil, line: 1),
+                        right: Literal(value: .number(23))
+                    )
                 )
-            )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -203,6 +218,7 @@ final class ParserTests: XCTestCase {
             [Token(type: .number, lexeme: "12", literal: .number(12), line: 1),
              Token(type: .star, lexeme: "*", literal: nil, line: 1),
              Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -212,11 +228,13 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Binary(
-                left: Literal(value: .number(12)),
-                operator: Token(type: .star, lexeme: "*", literal: nil, line: 1),
-                right: Literal(value: .number(23))
-            )
+            [Expression(
+                expression:Binary(
+                    left: Literal(value: .number(12)),
+                    operator: Token(type: .star, lexeme: "*", literal: nil, line: 1),
+                    right: Literal(value: .number(23))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -228,6 +246,7 @@ final class ParserTests: XCTestCase {
             [Token(type: .number, lexeme: "12", literal: .number(12), line: 1),
              Token(type: .slash, lexeme: "/", literal: nil, line: 1),
              Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -237,11 +256,13 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Binary(
-                left: Literal(value: .number(12)),
-                operator: Token(type: .slash, lexeme: "/", literal: nil, line: 1),
-                right: Literal(value: .number(23))
-            )
+            [Expression(
+                expression:Binary(
+                    left: Literal(value: .number(12)),
+                    operator: Token(type: .slash, lexeme: "/", literal: nil, line: 1),
+                    right: Literal(value: .number(23))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -255,6 +276,7 @@ final class ParserTests: XCTestCase {
              Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
              Token(type: .slash, lexeme: "/", literal: nil, line: 1),
              Token(type: .number, lexeme: "13", literal: .number(13), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -264,15 +286,17 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Binary(
-                left: Binary(
-                    left: Literal(value: .number(12)),
+            [Expression(
+                expression:Binary(
+                    left: Binary(
+                        left: Literal(value: .number(12)),
+                        operator: Token(type: .slash, lexeme: "/", literal: nil, line: 1),
+                        right: Literal(value: .number(23))
+                    ),
                     operator: Token(type: .slash, lexeme: "/", literal: nil, line: 1),
-                    right: Literal(value: .number(23))
-                ),
-                operator: Token(type: .slash, lexeme: "/", literal: nil, line: 1),
-                right: Literal(value: .number(13))
-            )
+                    right: Literal(value: .number(13))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -284,6 +308,7 @@ final class ParserTests: XCTestCase {
             [Token(type: .number, lexeme: "12", literal: .number(12), line: 1),
              Token(type: .plus, lexeme: "+", literal: nil, line: 1),
              Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -293,11 +318,13 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Binary(
-                left: Literal(value: .number(12)),
-                operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
-                right: Literal(value: .number(23))
-            )
+            [Expression(
+                expression:Binary(
+                    left: Literal(value: .number(12)),
+                    operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+                    right: Literal(value: .number(23))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -309,6 +336,7 @@ final class ParserTests: XCTestCase {
             [Token(type: .number, lexeme: "12", literal: .number(12), line: 1),
              Token(type: .minus, lexeme: "-", literal: nil, line: 1),
              Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -318,11 +346,13 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Binary(
-                left: Literal(value: .number(12)),
-                operator: Token(type: .minus, lexeme: "-", literal: nil, line: 1),
-                right: Literal(value: .number(23))
-            )
+            [Expression(
+                expression:Binary(
+                    left: Literal(value: .number(12)),
+                    operator: Token(type: .minus, lexeme: "-", literal: nil, line: 1),
+                    right: Literal(value: .number(23))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -336,6 +366,7 @@ final class ParserTests: XCTestCase {
              Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
              Token(type: .minus, lexeme: "-", literal: nil, line: 1),
              Token(type: .number, lexeme: "13", literal: .number(13), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -345,15 +376,17 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Binary(
-                left: Binary(
-                    left: Literal(value: .number(12)),
+            [Expression(
+                expression:Binary(
+                    left: Binary(
+                        left: Literal(value: .number(12)),
+                        operator: Token(type: .minus, lexeme: "-", literal: nil, line: 1),
+                        right: Literal(value: .number(23))
+                    ),
                     operator: Token(type: .minus, lexeme: "-", literal: nil, line: 1),
-                    right: Literal(value: .number(23))
-                ),
-                operator: Token(type: .minus, lexeme: "-", literal: nil, line: 1),
-                right: Literal(value: .number(13))
-            )
+                    right: Literal(value: .number(13))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -365,6 +398,7 @@ final class ParserTests: XCTestCase {
             [Token(type: .number, lexeme: "44", literal: .number(44), line: 1),
              Token(type: .greater, lexeme: ">", literal: nil, line: 1),
              Token(type: .number, lexeme: "33", literal: .number(33), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -374,11 +408,13 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Binary(
-                left: Literal(value: .number(44)),
-                operator: Token(type: .greater, lexeme: ">", literal: nil, line: 1),
-                right: Literal(value: .number(33))
-            )
+            [Expression(
+                expression:Binary(
+                    left: Literal(value: .number(44)),
+                    operator: Token(type: .greater, lexeme: ">", literal: nil, line: 1),
+                    right: Literal(value: .number(33))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -390,6 +426,7 @@ final class ParserTests: XCTestCase {
             [Token(type: .number, lexeme: "44", literal: .number(44), line: 1),
              Token(type: .greaterEqual, lexeme: ">=", literal: nil, line: 1),
              Token(type: .number, lexeme: "33", literal: .number(33), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -399,11 +436,13 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Binary(
-                left: Literal(value: .number(44)),
-                operator: Token(type: .greaterEqual, lexeme: ">=", literal: nil, line: 1),
-                right: Literal(value: .number(33))
-            )
+            [Expression(
+                expression:Binary(
+                    left: Literal(value: .number(44)),
+                    operator: Token(type: .greaterEqual, lexeme: ">=", literal: nil, line: 1),
+                    right: Literal(value: .number(33))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -415,6 +454,7 @@ final class ParserTests: XCTestCase {
             [Token(type: .number, lexeme: "44", literal: .number(44), line: 1),
              Token(type: .less, lexeme: "<", literal: nil, line: 1),
              Token(type: .number, lexeme: "33", literal: .number(33), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -424,11 +464,13 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Binary(
-                left: Literal(value: .number(44)),
-                operator: Token(type: .less, lexeme: "<", literal: nil, line: 1),
-                right: Literal(value: .number(33))
-            )
+            [Expression(
+                expression:Binary(
+                    left: Literal(value: .number(44)),
+                    operator: Token(type: .less, lexeme: "<", literal: nil, line: 1),
+                    right: Literal(value: .number(33))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -440,6 +482,7 @@ final class ParserTests: XCTestCase {
             [Token(type: .number, lexeme: "44", literal: .number(44), line: 1),
              Token(type: .lessEqual, lexeme: "<=", literal: nil, line: 1),
              Token(type: .number, lexeme: "33", literal: .number(33), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -449,11 +492,13 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Binary(
-                left: Literal(value: .number(44)),
-                operator: Token(type: .lessEqual, lexeme: "<=", literal: nil, line: 1),
-                right: Literal(value: .number(33))
-            )
+            [Expression(
+                expression:Binary(
+                    left: Literal(value: .number(44)),
+                    operator: Token(type: .lessEqual, lexeme: "<=", literal: nil, line: 1),
+                    right: Literal(value: .number(33))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -467,6 +512,7 @@ final class ParserTests: XCTestCase {
              Token(type: .number, lexeme: "33", literal: .number(33), line: 1),
              Token(type: .less, lexeme: "<", literal: nil, line: 1),
              Token(type: .number, lexeme: "55", literal: .number(55), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -476,15 +522,17 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Binary(
-                left: Binary(
-                    left: Literal(value: .number(44)),
+            [Expression(
+                expression:Binary(
+                    left: Binary(
+                        left: Literal(value: .number(44)),
+                        operator: Token(type: .less, lexeme: "<", literal: nil, line: 1),
+                        right: Literal(value: .number(33))
+                    ),
                     operator: Token(type: .less, lexeme: "<", literal: nil, line: 1),
-                    right: Literal(value: .number(33))
-                ),
-                operator: Token(type: .less, lexeme: "<", literal: nil, line: 1),
-                right: Literal(value: .number(55))
-            )
+                    right: Literal(value: .number(55))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -496,6 +544,7 @@ final class ParserTests: XCTestCase {
             [Token(type: .number, lexeme: "44", literal: .number(44), line: 1),
              Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
              Token(type: .number, lexeme: "33", literal: .number(33), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -505,11 +554,13 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Binary(
-                left: Literal(value: .number(44)),
-                operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
-                right: Literal(value: .number(33))
-            )
+            [Expression(
+                expression:Binary(
+                    left: Literal(value: .number(44)),
+                    operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
+                    right: Literal(value: .number(33))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -521,6 +572,7 @@ final class ParserTests: XCTestCase {
             [Token(type: .number, lexeme: "44", literal: .number(44), line: 1),
              Token(type: .bangEqual, lexeme: "!=", literal: nil, line: 1),
              Token(type: .number, lexeme: "33", literal: .number(33), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -530,11 +582,13 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Binary(
-                left: Literal(value: .number(44)),
-                operator: Token(type: .bangEqual, lexeme: "!=", literal: nil, line: 1),
-                right: Literal(value: .number(33))
-            )
+            [Expression(
+                expression:Binary(
+                    left: Literal(value: .number(44)),
+                    operator: Token(type: .bangEqual, lexeme: "!=", literal: nil, line: 1),
+                    right: Literal(value: .number(33))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -548,6 +602,7 @@ final class ParserTests: XCTestCase {
              Token(type: .number, lexeme: "33", literal: .number(33), line: 1),
              Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
              Token(type: .number, lexeme: "55", literal: .number(55), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -557,15 +612,17 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Binary(
-                left: Binary(
-                    left: Literal(value: .number(44)),
+            [Expression(
+                expression:Binary(
+                    left: Binary(
+                        left: Literal(value: .number(44)),
+                        operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
+                        right: Literal(value: .number(33))
+                    ),
                     operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
-                    right: Literal(value: .number(33))
-                ),
-                operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
-                right: Literal(value: .number(55))
-            )
+                    right: Literal(value: .number(55))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -585,6 +642,7 @@ final class ParserTests: XCTestCase {
              Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
              Token(type: .star, lexeme: "*", literal: nil, line: 1),
              Token(type: .number, lexeme: "2", literal: .number(2), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -594,27 +652,29 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Binary(
-                left: Grouping(
-                    expressions: [
-                        Binary(
-                            left: Literal(value: .number(44)),
-                            operator: Token(type: .greater, lexeme: ">", literal: nil, line: 1),
-                            right: Binary(
-                                left: Literal(value: .number(33)),
-                                operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+            [Expression(
+                expression:Binary(
+                    left: Grouping(
+                        expressions: [
+                            Binary(
+                                left: Literal(value: .number(44)),
+                                operator: Token(type: .greater, lexeme: ">", literal: nil, line: 1),
                                 right: Binary(
-                                    left: Literal(value: .number(11)),
-                                    operator: Token(type: .slash, lexeme: "/", literal: nil, line: 1),
-                                    right: Literal(value: .number(22))
+                                    left: Literal(value: .number(33)),
+                                    operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+                                    right: Binary(
+                                        left: Literal(value: .number(11)),
+                                        operator: Token(type: .slash, lexeme: "/", literal: nil, line: 1),
+                                        right: Literal(value: .number(22))
+                                    )
                                 )
                             )
-                        )
-                    ]
-                ),
-                operator: Token(type: .star, lexeme: "*", literal: nil, line: 1),
-                right: Literal(value: .number(2))
-            )
+                        ]
+                    ),
+                    operator: Token(type: .star, lexeme: "*", literal: nil, line: 1),
+                    right: Literal(value: .number(2))
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -625,6 +685,7 @@ final class ParserTests: XCTestCase {
         let sut = Parser(
             [Token(type: .leftParen, lexeme: "(", literal: nil, line: 1),
              Token(type: .nil, lexeme: "nil", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -632,7 +693,7 @@ final class ParserTests: XCTestCase {
         let result = sut.parse()
         
         // then
-        XCTAssertEqual(result, nil)
+        XCTAssertEqual(result, [])
         XCTAssertTrue(Lox.hadError)
     }
     
@@ -641,6 +702,7 @@ final class ParserTests: XCTestCase {
         // given
         let sut = Parser(
             [Token(type: .leftParen, lexeme: ")", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -648,11 +710,11 @@ final class ParserTests: XCTestCase {
         let result = sut.parse()
         
         // then
-        XCTAssertEqual(result, nil)
+        XCTAssertEqual(result, [])
         XCTAssertTrue(Lox.hadError)
     }
     
-    func testParse_eofOnly_returnsError() {
+    func testParse_eofOnly_returnsNothing() {
         
         // given
         let sut = Parser(
@@ -663,8 +725,8 @@ final class ParserTests: XCTestCase {
         let result = sut.parse()
         
         // then
-        XCTAssertEqual(result, nil)
-        XCTAssertTrue(Lox.hadError)
+        XCTAssertEqual(result, [])
+        XCTAssertFalse(Lox.hadError)
     }
     
     func testParse_groupOfExpressions_returnsGroup() {
@@ -678,6 +740,7 @@ final class ParserTests: XCTestCase {
              Token(type: .plus, lexeme: "+", literal: nil, line: 1),
              Token(type: .number, lexeme: "11", literal: .number(11), line: 1),
              Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -687,15 +750,17 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(
             result,
-            Grouping(
-                expressions: [
-                    Literal(value: .number(22)),
-                    Binary(
-                        left: Literal(value: .number(33)),
-                        operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
-                        right: Literal(value: .number(11)))
-                ]
-            )
+            [Expression(
+                expression:Grouping(
+                    expressions: [
+                        Literal(value: .number(22)),
+                        Binary(
+                            left: Literal(value: .number(33)),
+                            operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+                            right: Literal(value: .number(11)))
+                    ]
+                )
+            )]
         )
         XCTAssertFalse(Lox.hadError)
     }
@@ -706,6 +771,7 @@ final class ParserTests: XCTestCase {
         let sut = Parser(
             [Token(type: .plus, lexeme: "+", literal: nil, line: 1),
              Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: .number(23), line: 1),
              Token(type: .eof, lexeme: "", literal: nil, line: 1)]
         )
         
@@ -713,7 +779,7 @@ final class ParserTests: XCTestCase {
         let result = sut.parse()
         
         // then
-        XCTAssertEqual(result, nil)
+        XCTAssertEqual(result, [])
         XCTAssertEqual(errorReporter.reportArgs?.2, "Unary ‘+’ expressions are not supported")
     }
 }

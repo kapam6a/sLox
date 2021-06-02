@@ -178,7 +178,23 @@ private extension Parser {
 private extension Parser {
     
     func synchronize() {
+        _ = advance()
         
+        while !isAtEnd() {
+            if previous().type == .semicolon { return }
+            switch peek().type {
+            case .class,
+                 .fun,
+                 .var,
+                 .for,
+                 .if,
+                 .while,
+                 .print,
+                 .return: return
+            default: break
+            }
+            _ = advance()
+        }
     }
     
     func match(_ tokenTypes: TokenType...) -> Bool {

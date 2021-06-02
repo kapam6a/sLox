@@ -42,10 +42,12 @@ extension Interpreter: VisitorStmt {
             value = try evaluate(stmt.initializer!)
         }
         environment.define(stmt.name.lexeme, value)
+        printer.print(stringify(value))
     }
     
     func visitExpressionStmt( _ stmt: Expression) throws -> Void {
-        _ = try evaluate(stmt.expression)
+        let value = try evaluate(stmt.expression)
+        printer.print(stringify(value))
     }
     
     func visitPrintStmt( _ stmt: Print) throws -> Void {

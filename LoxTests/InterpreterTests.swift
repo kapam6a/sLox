@@ -33,7 +33,7 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_nil_printsOutNil() {
         
         // given
-        let expr = Literal(value: nil)
+        let expr = [Expression(expression: Literal(value: nil))]
         
         // when
         sut.interpret(expr)
@@ -46,7 +46,7 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_string_printsOutString() {
         
         // given
-        let expr = Literal(value: .string("Moscow city"))
+        let expr = [Expression(expression:Literal(value: .string("Moscow city")))]
         
         // when
         sut.interpret(expr)
@@ -59,7 +59,7 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_true_printsOutTrue() {
         
         // given
-        let expr = Literal(value: .boolean(true))
+        let expr = [Expression(expression:Literal(value: .boolean(true)))]
         
         // when
         sut.interpret(expr)
@@ -72,7 +72,7 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_false_printsOutFalse() {
         
         // given
-        let expr = Literal(value: .boolean(false))
+        let expr = [Expression(expression:Literal(value: .boolean(false)))]
         
         // when
         sut.interpret(expr)
@@ -85,7 +85,7 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_int_printsOutNumberWithoutFractionDigits() {
         
         // given
-        let expr = Literal(value: .number(33))
+        let expr = [Expression(expression:Literal(value: .number(33)))]
         
         // when
         sut.interpret(expr)
@@ -98,7 +98,7 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_double_printsOutNumberWithFractionDigits() {
         
         // given
-        let expr = Literal(value: .number(33.44))
+        let expr = [Expression(expression:Literal(value: .number(33.44)))]
         
         // when
         sut.interpret(expr)
@@ -111,10 +111,12 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_numberWithMinus_printsOutNegativeNumber() {
         
         // given
-        let expr = Unary(
-            operator: Token(type: .minus, lexeme: "-", literal: nil, line: 1),
-            right: Literal(value: .number(33.44))
-        )
+        let expr = [Expression(
+            expression: Unary(
+                operator: Token(type: .minus, lexeme: "-", literal: nil, line: 1),
+                right: Literal(value: .number(33.44))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -127,10 +129,12 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_nilWithExclamationMark_printsOutTrue() {
         
         // given
-        let expr = Unary(
-            operator: Token(type: .bang, lexeme: "!", literal: nil, line: 1),
-            right: Literal(value: nil)
-        )
+        let expr = [Expression(
+            expression: Unary(
+                operator: Token(type: .bang, lexeme: "!", literal: nil, line: 1),
+                right: Literal(value: nil)
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -143,10 +147,12 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_trueWithExclamationMark_printsOutFalse() {
         
         // given
-        let expr = Unary(
-            operator: Token(type: .bang, lexeme: "!", literal: nil, line: 1),
-            right: Literal(value: .boolean(true))
-        )
+        let expr = [Expression(
+            expression:Unary(
+                operator: Token(type: .bang, lexeme: "!", literal: nil, line: 1),
+                right: Literal(value: .boolean(true))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -159,10 +165,12 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_falseWithExclamationMark_printsOutTrue() {
         
         // given
-        let expr = Unary(
-            operator: Token(type: .bang, lexeme: "!", literal: nil, line: 1),
-            right: Literal(value: .boolean(false))
-        )
+        let expr = [Expression(
+            expression:Unary(
+                operator: Token(type: .bang, lexeme: "!", literal: nil, line: 1),
+                right: Literal(value: .boolean(false))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -175,10 +183,12 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_stringWithExclamationMark_printsOutFalse() {
         
         // given
-        let expr = Unary(
-            operator: Token(type: .bang, lexeme: "!", literal: nil, line: 1),
-            right: Literal(value: .string("Moscow city"))
-        )
+        let expr = [Expression(
+            expression: Unary(
+                operator: Token(type: .bang, lexeme: "!", literal: nil, line: 1),
+                right: Literal(value: .string("Moscow city"))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -191,10 +201,12 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_trueWithPlus_printsOutNil() {
         
         // given
-        let expr = Unary(
-            operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
-            right: Literal(value: .boolean(true))
-        )
+        let expr = [Expression(
+            expression: Unary(
+                operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+                right: Literal(value: .boolean(true))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -207,10 +219,12 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_trueWithMinus_reportsRuntimeError() {
         
         // given
-        let expr = Unary(
-            operator: Token(type: .minus, lexeme: "-", literal: nil, line: 1),
-            right: Literal(value: .boolean(true))
-        )
+        let expr = [Expression(
+            expression: Unary(
+                operator: Token(type: .minus, lexeme: "-", literal: nil, line: 1),
+                right: Literal(value: .boolean(true))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -223,11 +237,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoNumbersAddition_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .number(4)),
-            operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
-            right: Literal(value: .number(5))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .number(4)),
+                operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+                right: Literal(value: .number(5))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -240,11 +256,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoStringsConcatenation_printsOutCombinedString() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .string("Moscow")),
-            operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
-            right: Literal(value: .string(" city"))
-        )
+        let expr = [Expression(
+            expression: Binary(
+                left: Literal(value: .string("Moscow")),
+                operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+                right: Literal(value: .string(" city"))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -257,11 +275,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoBooleansAddition_reportsRuntimeError() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .boolean(false)),
-            operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
-            right: Literal(value: .boolean(true))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .boolean(false)),
+                operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+                right: Literal(value: .boolean(true))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -274,11 +294,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoNumbersSubtraction_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .number(4)),
-            operator: Token(type: .minus, lexeme: "-", literal: nil, line: 1),
-            right: Literal(value: .number(5))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .number(4)),
+                operator: Token(type: .minus, lexeme: "-", literal: nil, line: 1),
+                right: Literal(value: .number(5))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -291,11 +313,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoBooleansSubtraction_reportsRuntimeError() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .boolean(false)),
-            operator: Token(type: .minus, lexeme: "-", literal: nil, line: 1),
-            right: Literal(value: .boolean(true))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .boolean(false)),
+                operator: Token(type: .minus, lexeme: "-", literal: nil, line: 1),
+                right: Literal(value: .boolean(true))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -308,11 +332,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoNumbersMultiplication_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .number(4)),
-            operator: Token(type: .star, lexeme: "*", literal: nil, line: 1),
-            right: Literal(value: .number(5))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .number(4)),
+                operator: Token(type: .star, lexeme: "*", literal: nil, line: 1),
+                right: Literal(value: .number(5))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -325,11 +351,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoBooleansMultiplication_reportsRuntimeError() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .boolean(false)),
-            operator: Token(type: .star, lexeme: "*", literal: nil, line: 1),
-            right: Literal(value: .boolean(true))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .boolean(false)),
+                operator: Token(type: .star, lexeme: "*", literal: nil, line: 1),
+                right: Literal(value: .boolean(true))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -342,11 +370,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoNumbersDivision_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .number(20)),
-            operator: Token(type: .slash, lexeme: "/", literal: nil, line: 1),
-            right: Literal(value: .number(5))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .number(20)),
+                operator: Token(type: .slash, lexeme: "/", literal: nil, line: 1),
+                right: Literal(value: .number(5))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -359,11 +389,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoBooleansDivision_reportsRuntimeError() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .boolean(false)),
-            operator: Token(type: .slash, lexeme: "/", literal: nil, line: 1),
-            right: Literal(value: .boolean(true))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .boolean(false)),
+                operator: Token(type: .slash, lexeme: "/", literal: nil, line: 1),
+                right: Literal(value: .boolean(true))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -376,11 +408,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_oneNumberLessThanAnother_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .number(20)),
-            operator: Token(type: .less, lexeme: "<", literal: nil, line: 1),
-            right: Literal(value: .number(5))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .number(20)),
+                operator: Token(type: .less, lexeme: "<", literal: nil, line: 1),
+                right: Literal(value: .number(5))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -393,11 +427,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_oneBooleanLessThanAnother_reportsRuntimeError() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .boolean(false)),
-            operator: Token(type: .less, lexeme: "<", literal: nil, line: 1),
-            right: Literal(value: .boolean(true))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .boolean(false)),
+                operator: Token(type: .less, lexeme: "<", literal: nil, line: 1),
+                right: Literal(value: .boolean(true))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -410,11 +446,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_oneNumberLessOrEqualThanAnother_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .number(20)),
-            operator: Token(type: .lessEqual, lexeme: "<=", literal: nil, line: 1),
-            right: Literal(value: .number(5))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .number(20)),
+                operator: Token(type: .lessEqual, lexeme: "<=", literal: nil, line: 1),
+                right: Literal(value: .number(5))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -427,11 +465,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_oneBooleanLessOrEqualThanAnother_reportsRuntimeError() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .boolean(false)),
-            operator: Token(type: .lessEqual, lexeme: "<=", literal: nil, line: 1),
-            right: Literal(value: .boolean(true))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .boolean(false)),
+                operator: Token(type: .lessEqual, lexeme: "<=", literal: nil, line: 1),
+                right: Literal(value: .boolean(true))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -444,11 +484,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_lessOrEqualTwoIdenticalNumbers_printsOutTrue() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .number(20)),
-            operator: Token(type: .lessEqual, lexeme: "<=", literal: nil, line: 1),
-            right: Literal(value: .number(20))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .number(20)),
+                operator: Token(type: .lessEqual, lexeme: "<=", literal: nil, line: 1),
+                right: Literal(value: .number(20))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -461,11 +503,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_oneNumberGreaterThanAnother_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .number(20)),
-            operator: Token(type: .greater, lexeme: ">", literal: nil, line: 1),
-            right: Literal(value: .number(5))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .number(20)),
+                operator: Token(type: .greater, lexeme: ">", literal: nil, line: 1),
+                right: Literal(value: .number(5))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -478,11 +522,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_oneBooleanGreaterThanAnother_reportsRuntimeError() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .boolean(false)),
-            operator: Token(type: .greater, lexeme: ">", literal: nil, line: 1),
-            right: Literal(value: .boolean(true))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .boolean(false)),
+                operator: Token(type: .greater, lexeme: ">", literal: nil, line: 1),
+                right: Literal(value: .boolean(true))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -495,11 +541,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_greaterOrEqualTwoIdenticalNumbers_printsOutTrue() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .number(20)),
-            operator: Token(type: .greaterEqual, lexeme: ">=", literal: nil, line: 1),
-            right: Literal(value: .number(20))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .number(20)),
+                operator: Token(type: .greaterEqual, lexeme: ">=", literal: nil, line: 1),
+                right: Literal(value: .number(20))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -512,11 +560,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_oneBooleanGreaterOrEqualThanAnother_reportsRuntimeError() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .boolean(false)),
-            operator: Token(type: .greaterEqual, lexeme: ">=", literal: nil, line: 1),
-            right: Literal(value: .boolean(true))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .boolean(false)),
+                operator: Token(type: .greaterEqual, lexeme: ">=", literal: nil, line: 1),
+                right: Literal(value: .boolean(true))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -529,11 +579,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoNilsEquality_printsOutTrue() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: nil),
-            operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
-            right: Literal(value: nil)
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: nil),
+                operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
+                right: Literal(value: nil)
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -546,11 +598,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoNilsInequality_printsOutFalse() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: nil),
-            operator: Token(type: .bangEqual, lexeme: "!=", literal: nil, line: 1),
-            right: Literal(value: nil)
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: nil),
+                operator: Token(type: .bangEqual, lexeme: "!=", literal: nil, line: 1),
+                right: Literal(value: nil)
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -563,11 +617,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_equalityNilAndNotNil_printsOutFalse() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: nil),
-            operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
-            right: Literal(value: .number(23))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: nil),
+                operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
+                right: Literal(value: .number(23))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -580,11 +636,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_inequalityNilAndNotNil_printsOutTrue() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: nil),
-            operator: Token(type: .bangEqual, lexeme: "!=", literal: nil, line: 1),
-            right: Literal(value: .number(23))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: nil),
+                operator: Token(type: .bangEqual, lexeme: "!=", literal: nil, line: 1),
+                right: Literal(value: .number(23))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -597,11 +655,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoStringsEquality_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .string("Moscow city")),
-            operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
-            right: Literal(value: .string("Moscow city"))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .string("Moscow city")),
+                operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
+                right: Literal(value: .string("Moscow city"))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -614,11 +674,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoStringsInequality_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .string("Moscow city")),
-            operator: Token(type: .bangEqual, lexeme: "!=", literal: nil, line: 1),
-            right: Literal(value: .string("Moscow city"))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .string("Moscow city")),
+                operator: Token(type: .bangEqual, lexeme: "!=", literal: nil, line: 1),
+                right: Literal(value: .string("Moscow city"))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -631,11 +693,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoBooleansEquality_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .boolean(true)),
-            operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
-            right: Literal(value: .boolean(true))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .boolean(true)),
+                operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
+                right: Literal(value: .boolean(true))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -648,11 +712,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoBooleansInequality_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .boolean(true)),
-            operator: Token(type: .bangEqual, lexeme: "!=", literal: nil, line: 1),
-            right: Literal(value: .boolean(true))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .boolean(true)),
+                operator: Token(type: .bangEqual, lexeme: "!=", literal: nil, line: 1),
+                right: Literal(value: .boolean(true))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -665,11 +731,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoNumbersEquality_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .number(23)),
-            operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
-            right: Literal(value: .number(23))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .number(23)),
+                operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
+                right: Literal(value: .number(23))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -682,11 +750,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_twoNumbersInequality_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .number(23)),
-            operator: Token(type: .bangEqual, lexeme: "!=", literal: nil, line: 1),
-            right: Literal(value: .number(23))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .number(23)),
+                operator: Token(type: .bangEqual, lexeme: "!=", literal: nil, line: 1),
+                right: Literal(value: .number(23))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -699,11 +769,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_stringAndNumberEquality_printsOutFalse() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .number(23)),
-            operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
-            right: Literal(value: .string("Moscow city"))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .number(23)),
+                operator: Token(type: .equalEqual, lexeme: "==", literal: nil, line: 1),
+                right: Literal(value: .string("Moscow city"))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -716,11 +788,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_stringAndNumberInequality_printsOutTrue() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .number(23)),
-            operator: Token(type: .bangEqual, lexeme: "!=", literal: nil, line: 1),
-            right: Literal(value: .string("Moscow city"))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .number(23)),
+                operator: Token(type: .bangEqual, lexeme: "!=", literal: nil, line: 1),
+                right: Literal(value: .string("Moscow city"))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -733,20 +807,22 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_expressions_printsOutResultOfLastExpression() {
         
         // given
-        let expr = Grouping(
-            expressions: [
-                Binary(
-                    left: Literal(value: .number(2)),
-                    operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
-                    right: Literal(value: .number(3))
-                ),
-                Binary(
-                    left: Literal(value: .number(4)),
-                    operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
-                    right: Literal(value: .number(5))
-                )
-            ]
-        )
+        let expr = [Expression(
+            expression:Grouping(
+                expressions: [
+                    Binary(
+                        left: Literal(value: .number(2)),
+                        operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+                        right: Literal(value: .number(3))
+                    ),
+                    Binary(
+                        left: Literal(value: .number(4)),
+                        operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+                        right: Literal(value: .number(5))
+                    )
+                ]
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -759,11 +835,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_oneStringLessThanAnother_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .string("a")),
-            operator: Token(type: .less, lexeme: "<", literal: nil, line: 1),
-            right: Literal(value: .string("b"))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .string("a")),
+                operator: Token(type: .less, lexeme: "<", literal: nil, line: 1),
+                right: Literal(value: .string("b"))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -776,11 +854,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_oneStringLessEqualThanAnother_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .string("a")),
-            operator: Token(type: .lessEqual, lexeme: "<=", literal: nil, line: 1),
-            right: Literal(value: .string("b"))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .string("a")),
+                operator: Token(type: .lessEqual, lexeme: "<=", literal: nil, line: 1),
+                right: Literal(value: .string("b"))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -793,11 +873,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_oneStringGreateThanAnother_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .string("a")),
-            operator: Token(type: .greater, lexeme: ">", literal: nil, line: 1),
-            right: Literal(value: .string("b"))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .string("a")),
+                operator: Token(type: .greater, lexeme: ">", literal: nil, line: 1),
+                right: Literal(value: .string("b"))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -810,11 +892,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_oneStringGreaterOrEqualThanAnother_printsOutResult() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .string("a")),
-            operator: Token(type: .greaterEqual, lexeme: ">=", literal: nil, line: 1),
-            right: Literal(value: .string("b"))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .string("a")),
+                operator: Token(type: .greaterEqual, lexeme: ">=", literal: nil, line: 1),
+                right: Literal(value: .string("b"))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -827,11 +911,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_greaterOrEqualTwoIdenticalStrings_printsOutTrue() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .string("a")),
-            operator: Token(type: .greaterEqual, lexeme: ">=", literal: nil, line: 1),
-            right: Literal(value: .string("a"))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .string("a")),
+                operator: Token(type: .greaterEqual, lexeme: ">=", literal: nil, line: 1),
+                right: Literal(value: .string("a"))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -844,11 +930,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_lessOrEqualTwoIdenticalStrings_printsOutTrue() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .string("a")),
-            operator: Token(type: .lessEqual, lexeme: "<=", literal: nil, line: 1),
-            right: Literal(value: .string("a"))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .string("a")),
+                operator: Token(type: .lessEqual, lexeme: "<=", literal: nil, line: 1),
+                right: Literal(value: .string("a"))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -861,11 +949,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_concatenateStringAndNumber_printsOutCombinedString() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .string("Moscow")),
-            operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
-            right: Literal(value: .number(4.33))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .string("Moscow")),
+                operator: Token(type: .plus, lexeme: "+", literal: nil, line: 1),
+                right: Literal(value: .number(4.33))
+            )
+        )]
         
         // when
         sut.interpret(expr)
@@ -878,11 +968,13 @@ final class InterpreterTests: XCTestCase {
     func testInterpret_divisionByZero_reportsRuntimeError() {
         
         // given
-        let expr = Binary(
-            left: Literal(value: .number(20)),
-            operator: Token(type: .slash, lexeme: "/", literal: nil, line: 1),
-            right: Literal(value: .number(0))
-        )
+        let expr = [Expression(
+            expression:Binary(
+                left: Literal(value: .number(20)),
+                operator: Token(type: .slash, lexeme: "/", literal: nil, line: 1),
+                right: Literal(value: .number(0))
+            )
+        )]
         
         // when
         sut.interpret(expr)

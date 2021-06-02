@@ -21,6 +21,7 @@
 		3C33E0C7265E3D9900EF1612 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33E0C6265E3D9900EF1612 /* main.swift */; };
 		3C33E0D0265E704400EF1612 /* AstPrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33E0CF265E704400EF1612 /* AstPrinter.swift */; };
 		3CED7A6A2665323000C855D8 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CED7A692665323000C855D8 /* Environment.swift */; };
+		3CED7A6E2667BC3900C855D8 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CED7A692665323000C855D8 /* Environment.swift */; };
 		3CF76909265FDA3C00A99096 /* AstPrinterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF76908265FDA3C00A99096 /* AstPrinterTests.swift */; };
 		3CF7690D265FDA7100A99096 /* AstPrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33E0CF265E704400EF1612 /* AstPrinter.swift */; };
 		3CF76911265FDABD00A99096 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33E0BC265E3A0100EF1612 /* Expr.swift */; };
@@ -377,6 +378,7 @@
 				3CF7694F2662745D00A99096 /* ErrorReporterMock.swift in Sources */,
 				3C33E0A9265D3BE100EF1612 /* TokenType.swift in Sources */,
 				3CF769452662742000A99096 /* ErrorReporter.swift in Sources */,
+				3CED7A6E2667BC3900C855D8 /* Environment.swift in Sources */,
 				3CF76909265FDA3C00A99096 /* AstPrinterTests.swift in Sources */,
 				3C33E09D265D39B700EF1612 /* ScannerTests.swift in Sources */,
 				3CF7697826636B4C00A99096 /* StandardPrinter.swift in Sources */,
