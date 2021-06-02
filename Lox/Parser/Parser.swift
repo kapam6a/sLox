@@ -64,7 +64,7 @@ private extension Parser {
     func block() throws -> [Stmt] {
         var stmts: [Stmt] = []
         while !check(.rightBrace) && !isAtEnd()  {
-            stmts.append(try statement())
+            declaration().map { stmts.append($0) }
         }
         try consume(.rightBrace, "Expect '}' after block.")
         return stmts

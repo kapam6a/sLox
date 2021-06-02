@@ -690,10 +690,9 @@ final class ParserTests: XCTestCase {
         )
         
         // when
-        let result = sut.parse()
+        _ = sut.parse()
         
         // then
-        XCTAssertEqual(result, [])
         XCTAssertTrue(Lox.hadError)
     }
     
@@ -707,10 +706,9 @@ final class ParserTests: XCTestCase {
         )
         
         // when
-        let result = sut.parse()
+        _ = sut.parse()
         
         // then
-        XCTAssertEqual(result, [])
         XCTAssertTrue(Lox.hadError)
     }
     
@@ -781,5 +779,270 @@ final class ParserTests: XCTestCase {
         // then
         XCTAssertEqual(result, [])
         XCTAssertEqual(errorReporter.reportArgs?.2, "Unary ‘+’ expressions are not supported")
+    }
+}
+
+extension ParserTests {
+    
+    func testParse_identifierEqualToNumber_retunsAssign() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .identifier, lexeme: "age", literal: nil, line: 1),
+             Token(type: .equal, lexeme: "=", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(
+            result,
+            [Expression(
+                expression: Assign(
+                    name: Token(type: .identifier, lexeme: "age", literal: nil, line: 1),
+                    value: Literal(value: .number(23))
+                )
+            )]
+        )
+        XCTAssertFalse(Lox.hadError)
+    }
+    
+    func testParse_numberEqualToNumber_reportsError() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .number, lexeme: "13", literal: .number(13), line: 1),
+             Token(type: .equal, lexeme: "=", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        _ = sut.parse()
+        
+        // then
+        XCTAssertTrue(Lox.hadError)
+    }
+    
+    func testParse_numberEqualToNothing_reportsError() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .number, lexeme: "13", literal: .number(13), line: 1),
+             Token(type: .equal, lexeme: "=", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        _ = sut.parse()
+        
+        // then
+        XCTAssertTrue(Lox.hadError)
+    }
+    
+    func testParse_identifierEqualToNumberWithoutSemicolon_reportsError() {
+
+        // given
+        let sut = Parser(
+            [Token(type: .identifier, lexeme: "age", literal: nil, line: 1),
+             Token(type: .equal, lexeme: "=", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+
+        // when
+        _ = sut.parse()
+
+        // then
+        XCTAssertTrue(Lox.hadError)
+    }
+    
+    func testParse_printWithNumber_retunsPrint() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .print, lexeme: "print", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(result, [Print(expression:Literal(value: .number(23)))])
+        XCTAssertFalse(Lox.hadError)
+    }
+    
+    func testParse_printWithNumberWithoutSemicolon_reportsError() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .print, lexeme: "print", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        _ = sut.parse()
+        
+        // then
+        XCTAssertTrue(Lox.hadError)
+    }
+    
+    func testParse_varWithoutInitializer_retunsVar() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .var, lexeme: "var", literal: nil, line: 1),
+             Token(type: .identifier, lexeme: "age", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(
+            result,
+            [Var(
+                name: Token(type: .identifier, lexeme: "age", literal: nil, line: 1),
+                initializer: nil
+            )]
+        )
+        XCTAssertFalse(Lox.hadError)
+    }
+    
+    func testParse_varWithInitializer_retunsVar() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .var, lexeme: "var", literal: nil, line: 1),
+             Token(type: .identifier, lexeme: "age", literal: nil, line: 1),
+             Token(type: .equal, lexeme: "=", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(
+            result,
+            [Var(
+                name: Token(type: .identifier, lexeme: "age", literal: nil, line: 1),
+                initializer: Literal(value: .number(23))
+            )]
+        )
+        XCTAssertFalse(Lox.hadError)
+    }
+    
+    func testParse_varWithoutSemicolon_reportsError() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .var, lexeme: "var", literal: nil, line: 1),
+             Token(type: .identifier, lexeme: "age", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        _ = sut.parse()
+        
+        // then
+        XCTAssertTrue(Lox.hadError)
+    }
+    
+    func testParse_varWithNumber_reportsError() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .var, lexeme: "var", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        _ = sut.parse()
+        
+        // then
+        XCTAssertTrue(Lox.hadError)
+    }
+    
+    func testParse_blockWithoutStatements_retunsBlock() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .leftBrace, lexeme: "{", literal: nil, line: 1),
+             Token(type: .rightBrace, lexeme: "}", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(result, [Block(statements: [])])
+        XCTAssertFalse(Lox.hadError)
+    }
+    
+    func testParse_blockWithSemicolon_reportsError() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .leftBrace, lexeme: "{", literal: nil, line: 1),
+             Token(type: .rightBrace, lexeme: "}", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        _ = sut.parse()
+        
+        // then
+        XCTAssertTrue(Lox.hadError)
+    }
+    
+    func testParse_blockWithStatements_retunsBlock() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .leftBrace, lexeme: "{", literal: nil, line: 1),
+             Token(type: .var, lexeme: "var", literal: nil, line: 1),
+             Token(type: .identifier, lexeme: "age", literal: nil, line: 1),
+             Token(type: .equal, lexeme: "=", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .rightBrace, lexeme: "}", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(
+            result,
+            [Block(
+                statements: [
+                    Var(
+                        name: Token(type: .identifier, lexeme: "age", literal: nil, line: 1),
+                        initializer: Literal(value: .number(23))
+                    )
+                ]
+            )]
+        )
+        XCTAssertFalse(Lox.hadError)
     }
 }
