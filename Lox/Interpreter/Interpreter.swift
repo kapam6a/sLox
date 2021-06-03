@@ -15,10 +15,12 @@ struct RuntimeError: Error {
 final class Interpreter {
     
     private let printer: Printer
-    private var environment: Environment = Environment()
+    private var environment: Environment
     
-    init(_ printer: Printer = StandardPrinter()) {
+    init(_ printer: Printer = StandardPrinter(),
+         _ environment: Environment = Environment()) {
         self.printer = printer
+        self.environment = environment
     }
 
     func interpret(_ stmts: [Stmt]) {
@@ -75,7 +77,7 @@ private extension Interpreter {
 extension Interpreter: VisitorExpr {
     
     func visitAssignExpr(_ expr: Assign) throws -> Any? {
-        let value = try evaluate(expr)
+        let value = try evaluate(expr.value)
         try environment.assign(expr.name, value)
         return value
     }

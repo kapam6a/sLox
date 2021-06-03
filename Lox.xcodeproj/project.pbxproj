@@ -22,6 +22,7 @@
 		3C33E0D0265E704400EF1612 /* AstPrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33E0CF265E704400EF1612 /* AstPrinter.swift */; };
 		3CED7A6A2665323000C855D8 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CED7A692665323000C855D8 /* Environment.swift */; };
 		3CED7A6E2667BC3900C855D8 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CED7A692665323000C855D8 /* Environment.swift */; };
+		3CED7A732667E3A800C855D8 /* EnvironmentMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CED7A722667E3A800C855D8 /* EnvironmentMock.swift */; };
 		3CF76909265FDA3C00A99096 /* AstPrinterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF76908265FDA3C00A99096 /* AstPrinterTests.swift */; };
 		3CF7690D265FDA7100A99096 /* AstPrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33E0CF265E704400EF1612 /* AstPrinter.swift */; };
 		3CF76911265FDABD00A99096 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33E0BC265E3A0100EF1612 /* Expr.swift */; };
@@ -84,6 +85,7 @@
 		3C33E0C6265E3D9900EF1612 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		3C33E0CF265E704400EF1612 /* AstPrinter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstPrinter.swift; sourceTree = "<group>"; };
 		3CED7A692665323000C855D8 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		3CED7A722667E3A800C855D8 /* EnvironmentMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentMock.swift; sourceTree = "<group>"; };
 		3CF76908265FDA3C00A99096 /* AstPrinterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstPrinterTests.swift; sourceTree = "<group>"; };
 		3CF76915265FDE0500A99096 /* RpnAstPrinter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RpnAstPrinter.swift; sourceTree = "<group>"; };
 		3CF7691E265FE00100A99096 /* RpnAstPrinterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RpnAstPrinterTests.swift; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 			children = (
 				3CF7694E2662745D00A99096 /* ErrorReporterMock.swift */,
 				3CF7696F26636AD000A99096 /* PrinterMock.swift */,
+				3CED7A722667E3A800C855D8 /* EnvironmentMock.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -384,6 +387,7 @@
 				3CF7697826636B4C00A99096 /* StandardPrinter.swift in Sources */,
 				3CF76911265FDABD00A99096 /* Expr.swift in Sources */,
 				3CF769842663E20E00A99096 /* Stmt.swift in Sources */,
+				3CED7A732667E3A800C855D8 /* EnvironmentMock.swift in Sources */,
 				3CF7692C26621BB900A99096 /* ParserTests.swift in Sources */,
 				3C33E0A6265D3BDE00EF1612 /* Lox.swift in Sources */,
 				3C33E0AF265D3BE700EF1612 /* Scanner.swift in Sources */,

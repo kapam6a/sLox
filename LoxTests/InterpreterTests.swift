@@ -12,12 +12,14 @@ final class InterpreterTests: XCTestCase {
     private var errorReporter: ErrorReporterMock!
     private var printer: PrinterMock!
     private var sut: Interpreter!
+    private var environment: EnvironmentMock!
     
     override func setUp() {
         super.setUp()
         
+        environment = EnvironmentMock()
         printer = PrinterMock()
-        sut = Interpreter(printer)
+        sut = Interpreter(printer, environment)
         errorReporter = ErrorReporterMock()
         Lox.hadRuntimeError = false
         Lox.errorReporter = errorReporter
@@ -26,6 +28,7 @@ final class InterpreterTests: XCTestCase {
     override func tearDown() {
         errorReporter = nil
         sut = nil
+        environment = nil
         
         super.tearDown()
     }
@@ -982,5 +985,85 @@ final class InterpreterTests: XCTestCase {
         // then
         XCTAssertEqual(printer.message, nil)
         XCTAssertTrue(Lox.hadRuntimeError)
+    }
+}
+
+extension InterpreterTests {
+    
+    func testInterpret_printNumber_printsOutNumber() {
+        
+        // given
+        let expr = [Print(expression: Literal(value: .number(23)))]
+        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(printer.message, "23")
+        XCTAssertFalse(Lox.hadRuntimeError)
+    }
+    
+    func testInterpret_variableExpression_getsValueFromEnvironment() {
+        
+        // given
+        let expr = [Expression(
+            expression: Variable(
+                name: Token(type: .identifier, lexeme: "age", literal: nil, line: 1)
+            )
+        )]
+        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(
+            environment.getArg, Token(type: .identifier, lexeme: "age", literal: nil, line: 1)
+        )
+        XCTAssertFalse(Lox.hadRuntimeError)
+    }
+    
+    func testInterpret_assignExpression_callsEnvironmentAssign() {
+        
+        // given
+        let expr = [Expression(
+            expression: Assign(
+                name: Token(type: .identifier, lexeme: "age", literal: nil, line: 1),
+                value: Literal(value: .number(23))
+            )
+        )]
+        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(
+            environment.assignArgs?.0,
+            Token(type: .identifier, lexeme: "age", literal: nil, line: 1)
+        )
+        XCTAssertEqual(
+            environment.assignArgs?.1 as? Double, 23
+        )
+        XCTAssertFalse(Lox.hadRuntimeError)
+    }
+    
+    func testInterpret_varStatement_callsEnvironmentDefine() {
+        
+        // given
+        let expr = [Var(
+            name: Token(type: .identifier, lexeme: "age", literal: nil, line: 1),
+            initializer: Literal(value: .number(13))
+        )]
+        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(
+            environment.defineArgs?.0, "age"
+        )
+        XCTAssertEqual(
+            environment.defineArgs?.1 as? Double, 13
+        )
+        XCTAssertFalse(Lox.hadRuntimeError)
     }
 }

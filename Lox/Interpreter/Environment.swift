@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class Environment {
+class Environment {
     
     private let enclosing: Environment?
     private var values: [String : Any?] = [:]
