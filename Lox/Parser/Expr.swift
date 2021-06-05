@@ -20,6 +20,7 @@ protocol VisitorExpr{
 	func visitBinaryExpr( _ expr: Binary) throws -> ExprReturn
 	func visitGroupingExpr( _ expr: Grouping) throws -> ExprReturn
 	func visitLiteralExpr( _ expr: Literal) throws -> ExprReturn
+	func visitLogicalExpr( _ expr: Logical) throws -> ExprReturn
 	func visitUnaryExpr( _ expr: Unary) throws -> ExprReturn
 	func visitVariableExpr( _ expr: Variable) throws -> ExprReturn
 }
@@ -102,6 +103,30 @@ final class Literal: Expr {
 	override func isEqual(to other: Expr) -> Bool {
 		guard let other = other as? Literal else { return false }
 		return self.value == other.value
+	}
+}
+
+final class Logical: Expr {
+
+	let left: Expr
+	let `operator`: Token
+	let right: Expr
+
+	init(left: Expr, `operator`: Token, right: Expr) {
+		self.left = left
+		self.`operator` = `operator`
+		self.right = right
+	}
+
+	override func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.ExprReturn {
+		try visitor.visitLogicalExpr(self)
+	}
+
+	override func isEqual(to other: Expr) -> Bool {
+		guard let other = other as? Logical else { return false }
+		return self.left == other.left &&
+			self.`operator` == other.`operator` &&
+			self.right == other.right
 	}
 }
 

@@ -34,11 +34,25 @@ final class Interpreter {
 
 extension Interpreter: VisitorStmt {
     
-    func visitBlockStmt(_ stmt: Block) throws -> () {
+    func visitWhileStmt(_ stmt: While) throws -> Void {
+        while (isTruthy((try evaluate(stmt.condition)))) {
+            try execute(stmt.body)
+        }
+    }
+    
+    func visitIfStmt(_ stmt: If) throws -> Void {
+        if isTruthy(try evaluate(stmt.condition)) {
+            try execute(stmt.thenBranch)
+        } else if let elseBranch = stmt.elseBranch {
+            try execute(elseBranch)
+        }
+    }
+    
+    func visitBlockStmt(_ stmt: Block) throws -> Void {
         try executeBlock(stmt.statements, Environment())
     }
     
-    func visitVarStmt(_ stmt: Var) throws -> () {
+    func visitVarStmt(_ stmt: Var) throws -> Void {
         var value: Any?
         if stmt.initializer != nil {
             value = try evaluate(stmt.initializer!)
@@ -129,6 +143,16 @@ extension Interpreter: VisitorExpr {
         case .string(let string): return string
         case .none: return nil
         }
+    }
+    
+    func visitLogicalExpr(_ expr: Logical) throws -> Any? {
+        let left = try evaluate(expr.left)
+        if expr.operator.type == .or {
+            if isTruthy(left) { return left }
+        } else {
+            if !isTruthy(left) { return left }
+        }
+        return try evaluate(expr.left)
     }
     
     func visitUnaryExpr(_ expr: Unary) throws -> Any? {

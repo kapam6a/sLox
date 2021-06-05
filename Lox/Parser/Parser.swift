@@ -52,6 +52,9 @@ private extension Parser {
     func statement() throws -> Stmt {
         if match(.print) { return try printStatement() }
         if match(.leftBrace) { return Block(statements: try block()) }
+        if (match(.if)) { return try ifStatement() }
+        if (match(.while)) { return try whileStatement() }
+        if (match(.for)) { return try forStatement() }
         return try expressionStatement()
     }
     
@@ -70,6 +73,64 @@ private extension Parser {
         return stmts
     }
     
+    func ifStatement() throws -> Stmt {
+        try consume(.leftParen, "Expect '(' after 'if'.")
+        let condition = try expression()
+        try consume(.rightParen, "Expect ')' after 'if' condition.")
+        let thenBranch = try statement()
+        var elseBranch: Stmt?
+        if match(.else) {
+            elseBranch = try statement()
+        }
+        return If(condition: condition, thenBranch: thenBranch, elseBranch: elseBranch)
+    }
+    
+    func whileStatement() throws -> Stmt {
+        try consume(.leftParen, "Expect '(' after 'while'.")
+        let condition = try expression()
+        try consume(.rightParen, "Expect ')' after 'while' condition.")
+        let body = try statement()
+        return While(condition: condition, body: body)
+    }
+    
+    func forStatement() throws -> Stmt {
+        try consume(.leftParen, "Expect '(' after 'for'.")
+        var initializer: Stmt?
+        if match(.var) {
+            initializer = try varDeclaration()
+        } else if !match(.semicolon) {
+            initializer = try expressionStatement()
+        }
+        var condition: Expr?
+        if !check(.semicolon) {
+            condition = try expression()
+        }
+        try consume(.semicolon, "Expect ';' after loop condition.")
+        var increment: Expr?
+        if !check(.rightParen) {
+            increment = try expression();
+        }
+        try consume(.rightParen, "Expect ')' after 'for' condition.")
+        var body = try statement()
+        if let increment = increment {
+            body = Block(statements: [
+                body,
+                Expression(expression: increment)
+            ])
+        }
+        if condition == nil {
+            condition = Literal(value: .boolean(true))
+        }
+        body = While(condition: condition!, body: body)
+        if let initializer = initializer {
+            body = Block(statements: [
+                initializer,
+                body
+            ])
+        }
+        return body
+    }
+    
     func expressionStatement() throws -> Stmt {
         let expr = try expression()
         try consume(.semicolon, "Expect ';' after value.")
@@ -84,7 +145,7 @@ private extension Parser {
     }
     
     func assignment() throws -> Expr {
-        let expr = try equality()
+        let expr = try or()
         
         if match(.equal) {
             let equals = previous()
@@ -96,6 +157,28 @@ private extension Parser {
             _ = error(equals, "Invalid assignment target.")
         }
         
+        return expr
+    }
+    
+    func or() throws -> Expr {
+        var expr = try and()
+
+        while match(.or) {
+            let `operator` = previous()
+            let right = try and()
+            expr = Logical(left: expr, operator: `operator`, right: right)
+        }
+        return expr
+    }
+    
+    func and() throws -> Expr {
+        var expr = try equality()
+
+        while match(.and) {
+            let `operator` = previous()
+            let right = try equality()
+            expr = Logical(left: expr, operator: `operator`, right: right)
+        }
         return expr
     }
     

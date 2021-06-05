@@ -33,7 +33,12 @@ class Environment {
     
     func get(_ name: Token) throws -> Any? {
         if values.keys.contains(name.lexeme) {
-            return values[name.lexeme]!
+            if let value = values[name.lexeme],
+               value != nil {
+                return value
+            }
+            throw RuntimeError(operator: name,
+                               message: "Unassigned variable '" + name.lexeme + "'.")
         }
         if let enclosing = enclosing {
             return try enclosing.get(name)

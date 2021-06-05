@@ -67,7 +67,6 @@ final class EnvironmentTests: XCTestCase {
         // given
         enclosingEnvironment.getThrowError = true
            
-        // when
         // then
         XCTAssertThrowsError(_ = try sut.get(Token(type: .identifier, lexeme: "age", literal: nil, line: 1)))
     }
@@ -106,8 +105,16 @@ final class EnvironmentTests: XCTestCase {
         // given
         enclosingEnvironment.assignThrowError = true
            
-        // when
         // then
         XCTAssertThrowsError(try sut.assign(Token(type: .identifier, lexeme: "age", literal: nil, line: 1), 45))
+    }
+    
+    func testGet_whenVariableIsDefinedAsNil_returnsValue() throws {
+        
+        // given
+        sut.define("age", nil)
+        
+        // then
+        XCTAssertThrowsError(try sut.get(Token(type: .identifier, lexeme: "age", literal: nil, line: 1)))
     }
 }

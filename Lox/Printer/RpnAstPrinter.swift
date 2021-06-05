@@ -13,6 +13,10 @@ final class RpnAstPrinter: VisitorExpr {
         try! expr.accept(visitor: self)
     }
     
+    func visitLogicalExpr(_ expr: Logical) throws -> String {
+        ""
+    }
+    
     func visitAssignExpr(_ expr: Assign) throws -> String {
         ""
     }
