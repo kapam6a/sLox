@@ -24,11 +24,15 @@ final class EnvironmentMock: Environment {
     }
     
     var getArg: Token?
-    var getReturn: Any?
+    var getReturns: [Any?] = []
     var getThrowError: Bool = false
     override func get(_ name: Token) throws -> Any? {
         getArg = name
         if getThrowError { throw EnvironmentMockError() }
-        return getReturn
+        if getReturns.isEmpty {
+            return nil
+        } else {
+            return getReturns.removeLast()
+        }
     }
 }

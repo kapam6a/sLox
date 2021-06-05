@@ -42,7 +42,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "nil")
+        XCTAssertEqual(printer.message.first, "nil")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -55,7 +55,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "Moscow city")
+        XCTAssertEqual(printer.message.first, "Moscow city")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -68,7 +68,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "true")
+        XCTAssertEqual(printer.message.first, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -81,7 +81,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "false")
+        XCTAssertEqual(printer.message.first, "false")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -94,7 +94,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "33")
+        XCTAssertEqual(printer.message.first, "33")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -107,7 +107,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "33,44")
+        XCTAssertEqual(printer.message.first, "33,44")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -125,7 +125,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "-33,44")
+        XCTAssertEqual(printer.message.first, "-33,44")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -143,7 +143,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "true")
+        XCTAssertEqual(printer.message.first, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -161,7 +161,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "false")
+        XCTAssertEqual(printer.message.first, "false")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -179,7 +179,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "true")
+        XCTAssertEqual(printer.message.first, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -197,7 +197,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "false")
+        XCTAssertEqual(printer.message.first, "false")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -215,7 +215,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "nil")
+        XCTAssertEqual(printer.message.first, "nil")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -233,7 +233,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, nil)
+        XCTAssertEqual(printer.message, [])
         XCTAssertTrue(Lox.hadRuntimeError)
     }
     
@@ -252,7 +252,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "9")
+        XCTAssertEqual(printer.message.first, "9")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -271,7 +271,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "Moscow city")
+        XCTAssertEqual(printer.message.first, "Moscow city")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -290,7 +290,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, nil)
+        XCTAssertEqual(printer.message, [])
         XCTAssertTrue(Lox.hadRuntimeError)
     }
     
@@ -309,7 +309,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "-1")
+        XCTAssertEqual(printer.message.first, "-1")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -328,7 +328,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, nil)
+        XCTAssertEqual(printer.message, [])
         XCTAssertTrue(Lox.hadRuntimeError)
     }
     
@@ -347,7 +347,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "20")
+        XCTAssertEqual(printer.message.first, "20")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -366,7 +366,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, nil)
+        XCTAssertEqual(printer.message, [])
         XCTAssertTrue(Lox.hadRuntimeError)
     }
     
@@ -385,7 +385,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "4")
+        XCTAssertEqual(printer.message.first, "4")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -404,7 +404,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, nil)
+        XCTAssertEqual(printer.message, [])
         XCTAssertTrue(Lox.hadRuntimeError)
     }
     
@@ -423,7 +423,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "false")
+        XCTAssertEqual(printer.message.first, "false")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -442,7 +442,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, nil)
+        XCTAssertEqual(printer.message, [])
         XCTAssertTrue(Lox.hadRuntimeError)
     }
     
@@ -461,7 +461,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "false")
+        XCTAssertEqual(printer.message.first, "false")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -480,7 +480,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, nil)
+        XCTAssertEqual(printer.message, [])
         XCTAssertTrue(Lox.hadRuntimeError)
     }
     
@@ -499,7 +499,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "true")
+        XCTAssertEqual(printer.message.first, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -518,7 +518,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "true")
+        XCTAssertEqual(printer.message.first, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -537,7 +537,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, nil)
+        XCTAssertEqual(printer.message, [])
         XCTAssertTrue(Lox.hadRuntimeError)
     }
     
@@ -556,7 +556,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "true")
+        XCTAssertEqual(printer.message.first, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -575,7 +575,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, nil)
+        XCTAssertEqual(printer.message, [])
         XCTAssertTrue(Lox.hadRuntimeError)
     }
     
@@ -594,7 +594,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "true")
+        XCTAssertEqual(printer.message.first, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -613,7 +613,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "false")
+        XCTAssertEqual(printer.message.first, "false")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -632,7 +632,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "false")
+        XCTAssertEqual(printer.message.first, "false")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -651,7 +651,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "true")
+        XCTAssertEqual(printer.message.first, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -670,7 +670,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "true")
+        XCTAssertEqual(printer.message.first, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -689,7 +689,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "false")
+        XCTAssertEqual(printer.message.first, "false")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -708,7 +708,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "true")
+        XCTAssertEqual(printer.message.first, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -727,7 +727,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "false")
+        XCTAssertEqual(printer.message.first, "false")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -746,7 +746,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "true")
+        XCTAssertEqual(printer.message.first, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -765,7 +765,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "false")
+        XCTAssertEqual(printer.message.first, "false")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -784,7 +784,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "false")
+        XCTAssertEqual(printer.message.first, "false")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -803,7 +803,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "true")
+        XCTAssertEqual(printer.message.first, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -831,7 +831,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "9")
+        XCTAssertEqual(printer.message.first, "9")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -850,7 +850,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "true")
+        XCTAssertEqual(printer.message.first, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -869,7 +869,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "true")
+        XCTAssertEqual(printer.message.first, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -888,7 +888,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "false")
+        XCTAssertEqual(printer.message.first, "false")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -907,7 +907,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "false")
+        XCTAssertEqual(printer.message.first, "false")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -926,7 +926,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "true")
+        XCTAssertEqual(printer.message.first, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -945,7 +945,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "true")
+        XCTAssertEqual(printer.message.first, "true")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -964,7 +964,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "Moscow4.33")
+        XCTAssertEqual(printer.message.first, "Moscow4.33")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -983,7 +983,7 @@ final class InterpreterTests: XCTestCase {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, nil)
+        XCTAssertEqual(printer.message, [])
         XCTAssertTrue(Lox.hadRuntimeError)
     }
 }
@@ -999,7 +999,7 @@ extension InterpreterTests {
         sut.interpret(expr)
         
         // then
-        XCTAssertEqual(printer.message, "23")
+        XCTAssertEqual(printer.message.first, "23")
         XCTAssertFalse(Lox.hadRuntimeError)
     }
     
@@ -1064,6 +1064,77 @@ extension InterpreterTests {
         XCTAssertEqual(
             environment.defineArgs?.1 as? Double, 13
         )
+        XCTAssertFalse(Lox.hadRuntimeError)
+    }
+}
+
+extension InterpreterTests {
+    
+    func testInterpret_ifWithConiditionIsTrue_executeThenBranch() {
+        
+        // given
+        let expr = [If(
+            condition: Literal(value: .boolean(true)),
+            thenBranch: Print(expression: Literal(value: .string("then"))),
+            elseBranch: Print(expression: Literal(value: .string("else")))
+        )]
+        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(printer.message.first, "then")
+        XCTAssertFalse(Lox.hadRuntimeError)
+    }
+    
+    func testInterpret_ifWithConiditionIsFalse_executeThenBranch() {
+        
+        // given
+        let expr = [If(
+            condition: Literal(value: .boolean(false)),
+            thenBranch: Print(expression: Literal(value: .string("then"))),
+            elseBranch: Print(expression: Literal(value: .string("else")))
+        )]
+        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(printer.message.first, "else")
+        XCTAssertFalse(Lox.hadRuntimeError)
+    }
+    
+    func testInterpret_whileWithConditionIsFalse_doesNotExecuteBody() {
+        
+        // given
+        let expr = [While(
+            condition: Literal(value: .boolean(false)),
+            body: Print(expression: Literal(value: .string("while")))
+        )]
+                        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(printer.message, [])
+        XCTAssertFalse(Lox.hadRuntimeError)
+    }
+    
+    func testInterpret_whileWithConditionIsTrue_executeBodyFewTimes() {
+        
+        // given
+        environment.getReturns = [true, true]
+        let expr = [
+            While(
+                condition: Variable(name: Token(type: .identifier, lexeme: "counter", literal: nil, line: 1)),
+                body: Print(expression: Literal(value: .string("while")))
+        )]
+                        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(printer.message, ["while", "while"])
         XCTAssertFalse(Lox.hadRuntimeError)
     }
 }

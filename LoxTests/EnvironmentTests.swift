@@ -53,7 +53,7 @@ final class EnvironmentTests: XCTestCase {
     func testGet_whenVariableIsNotDefined_returnsEnclosingEnvironmentValue() throws {
         
         // given
-        enclosingEnvironment.getReturn = 23
+        enclosingEnvironment.getReturns = [23]
         
         // when
         let result = try sut.get(Token(type: .identifier, lexeme: "age", literal: nil, line: 1))
