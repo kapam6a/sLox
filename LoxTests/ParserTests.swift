@@ -1046,3 +1046,388 @@ extension ParserTests {
         XCTAssertFalse(Lox.hadError)
     }
 }
+
+extension ParserTests {
+
+    func testParse_if_returnsIf() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .if, lexeme: "if", literal: nil, line: 1),
+             Token(type: .leftParen, lexeme: "(", literal: nil, line: 1),
+             Token(type: .`true`, lexeme: "true", literal: .boolean(true), line: 1),
+             Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(
+            result,
+            [If(
+                condition: Literal(value: .boolean(true)),
+                thenBranch: Expression(expression: Literal(value: .number(23))),
+                elseBranch: nil
+            )]
+        )
+        XCTAssertFalse(Lox.hadError)
+    }
+    
+    func testParse_ifWithNoLeftParen_reportsError() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .if, lexeme: "if", literal: nil, line: 1),
+             Token(type: .`true`, lexeme: "true", literal: .boolean(true), line: 1),
+             Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        _ = sut.parse()
+        
+        // then
+        XCTAssertTrue(Lox.hadError)
+    }
+    
+    func testParse_ifWithNoRightParen_reportsError() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .if, lexeme: "if", literal: nil, line: 1),
+             Token(type: .leftParen, lexeme: "(", literal: nil, line: 1),
+             Token(type: .`true`, lexeme: "true", literal: .boolean(true), line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        _ = sut.parse()
+        
+        // then
+        XCTAssertTrue(Lox.hadError)
+    }
+    
+    func testParse_ifWithElse_returnsIf() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .if, lexeme: "if", literal: nil, line: 1),
+             Token(type: .leftParen, lexeme: "(", literal: nil, line: 1),
+             Token(type: .`true`, lexeme: "true", literal: .boolean(true), line: 1),
+             Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .else, lexeme: "else", literal: nil, line: 1),
+             Token(type: .number, lexeme: "11", literal: .number(11), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(
+            result,
+            [If(
+                condition: Literal(value: .boolean(true)),
+                thenBranch: Expression(expression: Literal(value: .number(23))),
+                elseBranch: Expression(expression: Literal(value: .number(11)))
+            )]
+        )
+        XCTAssertFalse(Lox.hadError)
+    }
+    
+    func testParse_while_returnsWhile() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .while, lexeme: "while", literal: nil, line: 1),
+             Token(type: .leftParen, lexeme: "(", literal: nil, line: 1),
+             Token(type: .`true`, lexeme: "true", literal: .boolean(true), line: 1),
+             Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(
+            result,
+            [While(
+                condition: Literal(value: .boolean(true)),
+                body: Expression(expression: Literal(value: .number(23)))
+            )]
+        )
+        XCTAssertFalse(Lox.hadError)
+    }
+    
+    func testParse_whileWithNoRightParen_reportsError() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .while, lexeme: "while", literal: nil, line: 1),
+             Token(type: .leftParen, lexeme: "(", literal: nil, line: 1),
+             Token(type: .`true`, lexeme: "true", literal: .boolean(true), line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        _ = sut.parse()
+        
+        // then
+        XCTAssertTrue(Lox.hadError)
+    }
+    
+    func testParse_whileWithNoLeftParen_reportsError() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .while, lexeme: "while", literal: nil, line: 1),
+             Token(type: .`true`, lexeme: "true", literal: .boolean(true), line: 1),
+             Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        _ = sut.parse()
+        
+        // then
+        XCTAssertTrue(Lox.hadError)
+    }
+    
+    func testParse_for_returnsWhile() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .for, lexeme: "for", literal: nil, line: 1),
+             Token(type: .leftParen, lexeme: "(", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(
+            result,
+            [While(
+                condition: Literal(value: .boolean(true)),
+                body: Expression(expression: Literal(value: .number(23)))
+            )]
+        )
+        XCTAssertFalse(Lox.hadError)
+    }
+    
+    func testParse_forWithInitializerAsVarDeclaration_returnsBlockWithVarAndWhile() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .for, lexeme: "for", literal: nil, line: 1),
+             Token(type: .leftParen, lexeme: "(", literal: nil, line: 1),
+             Token(type: .var, lexeme: "var", literal: nil, line: 1),
+             Token(type: .identifier, lexeme: "age", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(
+            result,
+            [Block(
+                statements: [
+                    Var(name: Token(type: .identifier, lexeme: "age", literal: nil, line: 1),
+                        initializer: nil),
+                    While(
+                        condition: Literal(value: .boolean(true)),
+                        body: Expression(expression: Literal(value: .number(23)))
+                    )
+                ]
+            )]
+        )
+        XCTAssertFalse(Lox.hadError)
+    }
+    
+    func testParse_forWithInitializerAsExpression_returnsBlockWithExpressionAndWhile() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .for, lexeme: "for", literal: nil, line: 1),
+             Token(type: .leftParen, lexeme: "(", literal: nil, line: 1),
+             Token(type: .number, lexeme: "11", literal: .number(11), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(
+            result,
+            [Block(
+                statements: [
+                    Expression(expression: Literal(value: .number(11))),
+                    While(
+                        condition: Literal(value: .boolean(true)),
+                        body: Expression(expression: Literal(value: .number(23)))
+                    )
+                ]
+            )]
+        )
+        XCTAssertFalse(Lox.hadError)
+    }
+    
+    func testParse_forWithCondition_returnsWhile() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .for, lexeme: "for", literal: nil, line: 1),
+             Token(type: .leftParen, lexeme: "(", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .number, lexeme: "11", literal: .number(11), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(
+            result,
+            [While(
+                condition: Literal(value: .number(11)),
+                body: Expression(expression: Literal(value: .number(23)))
+            )]
+        )
+        XCTAssertFalse(Lox.hadError)
+    }
+    
+    func testParse_forWithIncrement_returnsWhileWithBlock() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .for, lexeme: "for", literal: nil, line: 1),
+             Token(type: .leftParen, lexeme: "(", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .number, lexeme: "11", literal: .number(11), line: 1),
+             Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        let result = sut.parse()
+        
+        // then
+        XCTAssertEqual(
+            result,
+            [While(
+                condition: Literal(value: .boolean(true)),
+                body: Block(statements: [
+                    Expression(expression: Literal(value: .number(23))),
+                    Expression(expression: Literal(value: .number(11)))
+                ])
+                    
+            )]
+        )
+        XCTAssertFalse(Lox.hadError)
+    }
+    
+    func testParse_forWithNoLeftParen_reportsError() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .for, lexeme: "for", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        _ = sut.parse()
+        
+        // then
+        XCTAssertTrue(Lox.hadError)
+    }
+    
+    func testParse_forWithNoRightParen_reportsError() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .for, lexeme: "for", literal: nil, line: 1),
+             Token(type: .leftParen, lexeme: "(", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        _ = sut.parse()
+        
+        // then
+        XCTAssertTrue(Lox.hadError)
+    }
+    
+    func testParse_forWithSingleSemicolons_reportsError() {
+        
+        // given
+        let sut = Parser(
+            [Token(type: .for, lexeme: "for", literal: nil, line: 1),
+             Token(type: .leftParen, lexeme: "(", literal: nil, line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+             Token(type: .number, lexeme: "23", literal: .number(23), line: 1),
+             Token(type: .semicolon, lexeme: ";", literal: nil, line: 1),
+             Token(type: .eof, lexeme: "", literal: nil, line: 1)]
+        )
+        
+        // when
+        _ = sut.parse()
+        
+        // then
+        XCTAssertTrue(Lox.hadError)
+    }
+}
