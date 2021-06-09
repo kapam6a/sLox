@@ -16,11 +16,15 @@ final class Interpreter {
     
     private let printer: Printer
     private var environment: Environment
+    let globals: Environment
     
     init(_ printer: Printer = StandardPrinter(),
          _ environment: Environment = Environment()) {
         self.printer = printer
-        self.environment = environment
+        self.globals = environment
+        self.environment = globals
+        
+        globals.define("clock", Clock())
     }
 
     func interpret(_ stmts: [Stmt]) {
@@ -34,10 +38,9 @@ final class Interpreter {
 
 extension Interpreter: VisitorStmt {
     
-    func visitWhileStmt(_ stmt: While) throws -> Void {
-        while (isTruthy((try evaluate(stmt.condition)))) {
-            try execute(stmt.body)
-        }
+    func visitFunctionStmt(_ stmt: Function) throws -> Void {
+        let function = LoxFunction(declaration: stmt, closure: environment)
+        environment.define(stmt.name.lexeme, function)
     }
     
     func visitIfStmt(_ stmt: If) throws -> Void {
@@ -70,9 +73,20 @@ extension Interpreter: VisitorStmt {
         let value = try evaluate(stmt.expression)
         printer.print(stringify(value))
     }
+    
+    func visitReturnStmt(_ stmt: Return) throws -> Void {
+        let value = try stmt.value.flatMap { try evaluate($0) }
+        throw ReturnError(value)
+    }
+    
+    func visitWhileStmt(_ stmt: While) throws -> Void {
+        while (isTruthy((try evaluate(stmt.condition)))) {
+            try execute(stmt.body)
+        }
+    }
 }
 
-private extension Interpreter {
+extension Interpreter {
     
     func execute(_ stmt: Stmt) throws {
         try stmt.accept(visitor: self)
@@ -130,6 +144,18 @@ extension Interpreter: VisitorExpr {
             return isEqual(left, right)
         default: return nil
         }
+    }
+    
+    func visitCallExpr(_ expr: Call) throws -> Any? {
+        guard let function = try evaluate(expr.callee) as? Callable else {
+            throw RuntimeError(operator: expr.paren, message: "Can only call functions and classes.")
+        }
+        let args = try expr.arguments.map { try evaluate($0) }
+        if args.count != function.arity() {
+            throw RuntimeError(operator: expr.paren,
+                               message: "Expected \(function.arity()) arguments but got \(args.count).")
+        }
+        return try function.call(self, args)
     }
     
     func visitGroupingExpr(_ expr: Grouping) throws -> Any? {

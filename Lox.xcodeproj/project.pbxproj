@@ -20,7 +20,14 @@
 		3C33E0BD265E3A0100EF1612 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33E0BC265E3A0100EF1612 /* Expr.swift */; };
 		3C33E0C7265E3D9900EF1612 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33E0C6265E3D9900EF1612 /* main.swift */; };
 		3C33E0D0265E704400EF1612 /* AstPrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33E0CF265E704400EF1612 /* AstPrinter.swift */; };
+		3C5F0A5E266FA1C100851AE6 /* ReturnError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5F0A5D266FA1C100851AE6 /* ReturnError.swift */; };
+		3C5F0A62266FA1C300851AE6 /* ReturnError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5F0A5D266FA1C100851AE6 /* ReturnError.swift */; };
 		3C8A78DF2668DFCC00C1C6F8 /* EnvironmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A78DE2668DFCC00C1C6F8 /* EnvironmentTests.swift */; };
+		3C8A7959266CDA3F00C1C6F8 /* Callable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A7958266CDA3F00C1C6F8 /* Callable.swift */; };
+		3C8A795D266CEB1C00C1C6F8 /* Callable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A7958266CDA3F00C1C6F8 /* Callable.swift */; };
+		3C8A7962266CEB8000C1C6F8 /* Clock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A7961266CEB8000C1C6F8 /* Clock.swift */; };
+		3C8A7966266CEB9300C1C6F8 /* Clock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A7961266CEB8000C1C6F8 /* Clock.swift */; };
+		3C8A796B266D080600C1C6F8 /* LoxFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A796A266D080600C1C6F8 /* LoxFunction.swift */; };
 		3CED7A6A2665323000C855D8 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CED7A692665323000C855D8 /* Environment.swift */; };
 		3CED7A6E2667BC3900C855D8 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CED7A692665323000C855D8 /* Environment.swift */; };
 		3CED7A732667E3A800C855D8 /* EnvironmentMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CED7A722667E3A800C855D8 /* EnvironmentMock.swift */; };
@@ -85,7 +92,11 @@
 		3C33E0C4265E3D9900EF1612 /* AstGenerator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AstGenerator; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C33E0C6265E3D9900EF1612 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		3C33E0CF265E704400EF1612 /* AstPrinter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstPrinter.swift; sourceTree = "<group>"; };
+		3C5F0A5D266FA1C100851AE6 /* ReturnError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnError.swift; sourceTree = "<group>"; };
 		3C8A78DE2668DFCC00C1C6F8 /* EnvironmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentTests.swift; sourceTree = "<group>"; };
+		3C8A7958266CDA3F00C1C6F8 /* Callable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Callable.swift; sourceTree = "<group>"; };
+		3C8A7961266CEB8000C1C6F8 /* Clock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clock.swift; sourceTree = "<group>"; };
+		3C8A796A266D080600C1C6F8 /* LoxFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoxFunction.swift; sourceTree = "<group>"; };
 		3CED7A692665323000C855D8 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		3CED7A722667E3A800C855D8 /* EnvironmentMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentMock.swift; sourceTree = "<group>"; };
 		3CF76908265FDA3C00A99096 /* AstPrinterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstPrinterTests.swift; sourceTree = "<group>"; };
@@ -241,6 +252,10 @@
 			children = (
 				3CF76957266295C900A99096 /* Interpreter.swift */,
 				3CED7A692665323000C855D8 /* Environment.swift */,
+				3C8A7958266CDA3F00C1C6F8 /* Callable.swift */,
+				3C8A7961266CEB8000C1C6F8 /* Clock.swift */,
+				3C8A796A266D080600C1C6F8 /* LoxFunction.swift */,
+				3C5F0A5D266FA1C100851AE6 /* ReturnError.swift */,
 			);
 			path = Interpreter;
 			sourceTree = "<group>";
@@ -356,6 +371,8 @@
 			files = (
 				3CF76958266295C900A99096 /* Interpreter.swift in Sources */,
 				3CED7A6A2665323000C855D8 /* Environment.swift in Sources */,
+				3C5F0A5E266FA1C100851AE6 /* ReturnError.swift in Sources */,
+				3C8A7959266CDA3F00C1C6F8 /* Callable.swift in Sources */,
 				3C33E0D0265E704400EF1612 /* AstPrinter.swift in Sources */,
 				3CF769802663E20A00A99096 /* Stmt.swift in Sources */,
 				3C33E08E265BE0DB00EF1612 /* TokenType.swift in Sources */,
@@ -365,11 +382,13 @@
 				3C33E083265BBF3300EF1612 /* main.swift in Sources */,
 				3CF7696B26636A1700A99096 /* StandardPrinter.swift in Sources */,
 				3C33E08B265BC88200EF1612 /* Lox.swift in Sources */,
+				3C8A7962266CEB8000C1C6F8 /* Clock.swift in Sources */,
 				3CF769272660FE8200A99096 /* Parser.swift in Sources */,
 				3CF7693E2662736800A99096 /* StandardErrorReporter.swift in Sources */,
 				3C33E094265BE7EC00EF1612 /* Scanner.swift in Sources */,
 				3C33E0BD265E3A0100EF1612 /* Expr.swift in Sources */,
 				3C33E091265BE28200EF1612 /* Token.swift in Sources */,
+				3C8A796B266D080600C1C6F8 /* LoxFunction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,9 +398,11 @@
 			files = (
 				3CF7695C2663657300A99096 /* Interpreter.swift in Sources */,
 				3CF769492662742C00A99096 /* StandardErrorReporter.swift in Sources */,
+				3C8A795D266CEB1C00C1C6F8 /* Callable.swift in Sources */,
 				3CF7697426636B4900A99096 /* Printer.swift in Sources */,
 				3CF7690D265FDA7100A99096 /* AstPrinter.swift in Sources */,
 				3CF7694F2662745D00A99096 /* ErrorReporterMock.swift in Sources */,
+				3C5F0A62266FA1C300851AE6 /* ReturnError.swift in Sources */,
 				3C33E0A9265D3BE100EF1612 /* TokenType.swift in Sources */,
 				3CF769452662742000A99096 /* ErrorReporter.swift in Sources */,
 				3CED7A6E2667BC3900C855D8 /* Environment.swift in Sources */,
@@ -394,6 +415,7 @@
 				3CF7692C26621BB900A99096 /* ParserTests.swift in Sources */,
 				3C33E0A6265D3BDE00EF1612 /* Lox.swift in Sources */,
 				3C33E0AF265D3BE700EF1612 /* Scanner.swift in Sources */,
+				3C8A7966266CEB9300C1C6F8 /* Clock.swift in Sources */,
 				3C8A78DF2668DFCC00C1C6F8 /* EnvironmentTests.swift in Sources */,
 				3CF7693026621C2600A99096 /* Parser.swift in Sources */,
 				3C33E0AC265D3BE400EF1612 /* Token.swift in Sources */,

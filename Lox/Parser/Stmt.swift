@@ -18,8 +18,10 @@ protocol VisitorStmt{
 
 	func visitBlockStmt( _ stmt: Block) throws -> StmtReturn
 	func visitExpressionStmt( _ stmt: Expression) throws -> StmtReturn
+	func visitFunctionStmt( _ stmt: Function) throws -> StmtReturn
 	func visitIfStmt( _ stmt: If) throws -> StmtReturn
 	func visitPrintStmt( _ stmt: Print) throws -> StmtReturn
+	func visitReturnStmt( _ stmt: Return) throws -> StmtReturn
 	func visitVarStmt( _ stmt: Var) throws -> StmtReturn
 	func visitWhileStmt( _ stmt: While) throws -> StmtReturn
 }
@@ -57,6 +59,30 @@ final class Expression: Stmt {
 	override func isEqual(to other: Stmt) -> Bool {
 		guard let other = other as? Expression else { return false }
 		return self.expression == other.expression
+	}
+}
+
+final class Function: Stmt {
+
+	let name: Token
+	let params: [Token]
+	let body: [Stmt]
+
+	init(name: Token, params: [Token], body: [Stmt]) {
+		self.name = name
+		self.params = params
+		self.body = body
+	}
+
+	override func accept<V: VisitorStmt, T>(visitor: V) throws -> T where T == V.StmtReturn {
+		try visitor.visitFunctionStmt(self)
+	}
+
+	override func isEqual(to other: Stmt) -> Bool {
+		guard let other = other as? Function else { return false }
+		return self.name == other.name &&
+			self.params == other.params &&
+			self.body == other.body
 	}
 }
 
@@ -99,6 +125,27 @@ final class Print: Stmt {
 	override func isEqual(to other: Stmt) -> Bool {
 		guard let other = other as? Print else { return false }
 		return self.expression == other.expression
+	}
+}
+
+final class Return: Stmt {
+
+	let keyword: Token 
+	let value: Expr?
+
+	init(keyword: Token , value: Expr?) {
+		self.keyword = keyword
+		self.value = value
+	}
+
+	override func accept<V: VisitorStmt, T>(visitor: V) throws -> T where T == V.StmtReturn {
+		try visitor.visitReturnStmt(self)
+	}
+
+	override func isEqual(to other: Stmt) -> Bool {
+		guard let other = other as? Return else { return false }
+		return self.keyword == other.keyword &&
+			self.value == other.value
 	}
 }
 

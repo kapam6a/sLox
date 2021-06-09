@@ -16,6 +16,7 @@ let outputDir = CommandLine.arguments[1]
 defineAst(outputDir, "Expr", [
     "Assign   :: name: Token, value: Expr",
     "Binary   :: left: Expr, `operator`: Token, right: Expr",
+    "Call     :: callee: Expr, paren: Token, arguments: [Expr]",
     "Grouping :: expressions: [Expr]",
     "Literal  :: value: LiteralType?",
     "Logical  :: left: Expr, `operator`: Token, right: Expr",
@@ -26,8 +27,10 @@ defineAst(outputDir, "Expr", [
 defineAst(outputDir, "Stmt", [
     "Block      :: statements: [Stmt]",
     "Expression :: expression: Expr",
+    "Function   :: name: Token, params: [Token], body: [Stmt]",
     "If         :: condition: Expr , thenBranch: Stmt, elseBranch: Stmt?",
     "Print      :: expression: Expr",
+    "Return     :: keyword: Token , value: Expr?",
     "Var        :: name: Token , initializer: Expr?",
     "While      :: condition: Expr, body: Stmt"
 ])

@@ -32,6 +32,7 @@ private extension Parser {
     func declaration() -> Stmt? {
         do {
             if match(.var) { return try varDeclaration() }
+            if match(.fun) { return try function("function") }
             return try statement()
         } catch {
             synchronize()
@@ -49,12 +50,31 @@ private extension Parser {
         return Var(name: name, initializer: initializer)
     }
     
+    private func function(_ kind: String) throws -> Stmt {
+        let name = try consume(.identifier, "Expect " + kind + " name.")
+        try consume(.leftParen, "Expect '(' after " + kind + " name.")
+        var parameters: [Token] = []
+        if (!check(.rightParen)) {
+            repeat {
+                if parameters.count >= 255 {
+                    error(peek(), "Can't have more than 255 parameters.");
+                }
+                parameters.append(try consume(.identifier, "Expect parameter name."));
+            } while match(.comma)
+        }
+        try consume(.rightParen, "Expect ')' after parameters.")
+        try consume(.leftBrace, "Expect '{' before " + kind + " body.")
+        let body = try block()
+        return Function(name: name, params: parameters, body: body)
+     }
+    
     func statement() throws -> Stmt {
         if match(.print) { return try printStatement() }
         if match(.leftBrace) { return Block(statements: try block()) }
         if (match(.if)) { return try ifStatement() }
         if (match(.while)) { return try whileStatement() }
         if (match(.for)) { return try forStatement() }
+        if match(.return) { return try returnStatement() }
         return try expressionStatement()
     }
     
@@ -62,6 +82,16 @@ private extension Parser {
         let expr = try expression()
         try consume(.semicolon, "Expect ';' after value.")
         return Print(expression: expr)
+    }
+    
+    func returnStatement() throws -> Stmt {
+        let keyword = previous()
+        var value: Expr?
+        if !check(.semicolon) {
+            value = try expression()
+        }
+        try consume(.semicolon, "Expect ';' after return value.")
+        return Return(keyword: keyword, value: value)
     }
     
     func block() throws -> [Stmt] {
@@ -235,7 +265,20 @@ private extension Parser {
             default: return Unary(operator: `operator`, right: right)
             }
         }
-        return try primary()
+        return try call()
+    }
+    
+    func call() throws -> Expr {
+        var expr = try primary()
+        
+        while true {
+            if match(.leftParen) {
+                expr = try finishCall(expr)
+            } else {
+                break
+            }
+        }
+        return expr
     }
     
     func primary() throws -> Expr {
@@ -259,6 +302,20 @@ private extension Parser {
 
 
 private extension Parser {
+    
+    func finishCall(_ calle: Expr) throws -> Expr {
+        var args: [Expr] = []
+        if !check(.rightParen) {
+            repeat {
+                if args.count >= 255 {
+                    error(peek(), "Can't have more than 255 arguments.");
+                }
+                args.append(try expression())
+            } while match(.comma)
+        }
+        let paren = try consume(.rightParen, "Expect ')' after arguments.")
+        return Call(callee: calle, paren: paren, arguments: args)
+    }
     
     func synchronize() {
         _ = advance()
@@ -317,7 +374,7 @@ private extension Parser {
         tokens[current - 1]
     }
     
-    func error(_ token: Token, _ message: String) -> Error {
+    @discardableResult func error(_ token: Token, _ message: String) -> Error {
         Lox.error(token, message)
         return ParserError()
     }

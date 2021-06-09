@@ -18,6 +18,7 @@ protocol VisitorExpr{
 
 	func visitAssignExpr( _ expr: Assign) throws -> ExprReturn
 	func visitBinaryExpr( _ expr: Binary) throws -> ExprReturn
+	func visitCallExpr( _ expr: Call) throws -> ExprReturn
 	func visitGroupingExpr( _ expr: Grouping) throws -> ExprReturn
 	func visitLiteralExpr( _ expr: Literal) throws -> ExprReturn
 	func visitLogicalExpr( _ expr: Logical) throws -> ExprReturn
@@ -67,6 +68,30 @@ final class Binary: Expr {
 		return self.left == other.left &&
 			self.`operator` == other.`operator` &&
 			self.right == other.right
+	}
+}
+
+final class Call: Expr {
+
+	let callee: Expr
+	let paren: Token
+	let arguments: [Expr]
+
+	init(callee: Expr, paren: Token, arguments: [Expr]) {
+		self.callee = callee
+		self.paren = paren
+		self.arguments = arguments
+	}
+
+	override func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.ExprReturn {
+		try visitor.visitCallExpr(self)
+	}
+
+	override func isEqual(to other: Expr) -> Bool {
+		guard let other = other as? Call else { return false }
+		return self.callee == other.callee &&
+			self.paren == other.paren &&
+			self.arguments == other.arguments
 	}
 }
 

@@ -8,9 +8,13 @@
 import Foundation
 
 final class AstPrinter: VisitorExpr {
-    
+   
     func print(_ expr: Expr) -> String {
         try! expr.accept(visitor: self)
+    }
+    
+    func visitCallExpr(_ expr: Call) throws -> String {
+        ""
     }
     
     func visitLogicalExpr(_ expr: Logical) throws -> String {
