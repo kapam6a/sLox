@@ -22,6 +22,7 @@
 		3C33E0D0265E704400EF1612 /* AstPrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33E0CF265E704400EF1612 /* AstPrinter.swift */; };
 		3C5F0A5E266FA1C100851AE6 /* ReturnError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5F0A5D266FA1C100851AE6 /* ReturnError.swift */; };
 		3C5F0A62266FA1C300851AE6 /* ReturnError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5F0A5D266FA1C100851AE6 /* ReturnError.swift */; };
+		3C5F0A692670F0B700851AE6 /* LoxFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A796A266D080600C1C6F8 /* LoxFunction.swift */; };
 		3C8A78DF2668DFCC00C1C6F8 /* EnvironmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A78DE2668DFCC00C1C6F8 /* EnvironmentTests.swift */; };
 		3C8A7959266CDA3F00C1C6F8 /* Callable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A7958266CDA3F00C1C6F8 /* Callable.swift */; };
 		3C8A795D266CEB1C00C1C6F8 /* Callable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A7958266CDA3F00C1C6F8 /* Callable.swift */; };
@@ -409,6 +410,7 @@
 				3CF76909265FDA3C00A99096 /* AstPrinterTests.swift in Sources */,
 				3C33E09D265D39B700EF1612 /* ScannerTests.swift in Sources */,
 				3CF7697826636B4C00A99096 /* StandardPrinter.swift in Sources */,
+				3C5F0A692670F0B700851AE6 /* LoxFunction.swift in Sources */,
 				3CF76911265FDABD00A99096 /* Expr.swift in Sources */,
 				3CF769842663E20E00A99096 /* Stmt.swift in Sources */,
 				3CED7A732667E3A800C855D8 /* EnvironmentMock.swift in Sources */,
