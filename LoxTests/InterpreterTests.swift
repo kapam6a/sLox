@@ -1137,4 +1137,104 @@ extension InterpreterTests {
         XCTAssertEqual(printer.message, ["while", "while"])
         XCTAssertFalse(Lox.hadRuntimeError)
     }
+    
+    func testInterpret_function_updatesEnvironment() {
+        
+        // given
+        let expr = [Function(
+            name: Token(type: .identifier, lexeme: "get", literal: nil, line: 1),
+            params: [],
+            body: []
+        )]
+                        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertEqual(environment.defineArgs?.0, "get")
+        XCTAssertTrue(environment.defineArgs?.1 is LoxFunction)
+        XCTAssertFalse(Lox.hadRuntimeError)
+    }
+    
+    func testInterpret_call_printsOutResult() {
+        
+        // given
+        environment.getReturns = [
+            LoxFunction(
+                declaration:
+                    Function(
+                        name: Token(type: .identifier, lexeme: "get", literal: nil, line: 1),
+                        params: [],
+                        body: [Expression(expression: Literal(value: .boolean(true)))]
+                    ),
+                closure: environment)
+        ]
+        let expr = [Expression(
+            expression: Call(
+                callee: Variable(
+                    name: Token(type: .identifier, lexeme: "get", literal: nil, line: 1)
+                ),
+                paren: Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+                arguments: []
+            )
+        )]
+                        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertTrue(printer.message.contains("true"))
+        XCTAssertFalse(Lox.hadRuntimeError)
+    }
+    
+    func testInterpret_callWithDifferentNumberOfParametersAndArguments_reportsError() {
+        
+        // given
+        environment.getReturns = [
+            LoxFunction(
+                declaration:
+                    Function(
+                        name: Token(type: .identifier, lexeme: "get", literal: nil, line: 1),
+                        params: [],
+                        body: [Expression(expression: Literal(value: .boolean(true)))]
+                    ),
+                closure: environment)
+        ]
+        let expr = [Expression(
+            expression: Call(
+                callee: Variable(
+                    name: Token(type: .identifier, lexeme: "get", literal: nil, line: 1)
+                ),
+                paren: Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+                arguments: [Literal(value: .boolean(true))]
+            )
+        )]
+                        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertTrue(Lox.hadRuntimeError)
+    }
+    
+    func testInterpret_callWithNoDeclaration_reportsError() {
+        
+        // given
+        environment.getReturns = []
+        let expr = [Expression(
+            expression: Call(
+                callee: Variable(
+                    name: Token(type: .identifier, lexeme: "get", literal: nil, line: 1)
+                ),
+                paren: Token(type: .rightParen, lexeme: ")", literal: nil, line: 1),
+                arguments: []
+            )
+        )]
+                        
+        // when
+        sut.interpret(expr)
+        
+        // then
+        XCTAssertTrue(Lox.hadRuntimeError)
+    }
 }
