@@ -116,7 +116,7 @@ extension Resolver: VisitorExpr {
     
     func visitVariableExpr(_ expr: Variable) throws -> Void {
         if scopes.hasNext(),
-           scopes.peek()?[expr.name.lexeme] == false {
+           scopes.peek()?[expr.name.lexeme] != true {
               Lox.error(expr.name, "Can't read local variable in its own initializer.");
         }
         try resolveLocal(expr, expr.name)

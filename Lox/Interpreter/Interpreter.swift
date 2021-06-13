@@ -12,7 +12,7 @@ struct RuntimeError: Error {
     let message: String
 }
 
-final class Interpreter {
+class Interpreter {
     
     private let printer: Printer
     private var environment: Environment

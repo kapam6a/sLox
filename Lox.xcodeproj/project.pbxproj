@@ -33,6 +33,8 @@
 		3C8A7962266CEB8000C1C6F8 /* Clock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A7961266CEB8000C1C6F8 /* Clock.swift */; };
 		3C8A7966266CEB9300C1C6F8 /* Clock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A7961266CEB8000C1C6F8 /* Clock.swift */; };
 		3C8A796B266D080600C1C6F8 /* LoxFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A796A266D080600C1C6F8 /* LoxFunction.swift */; };
+		3C9FD76E26760CC6003F9614 /* ResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9FD76D26760CC6003F9614 /* ResolverTests.swift */; };
+		3C9FD77626760CF7003F9614 /* InterpreterMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9FD77526760CF7003F9614 /* InterpreterMock.swift */; };
 		3CED7A6A2665323000C855D8 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CED7A692665323000C855D8 /* Environment.swift */; };
 		3CED7A6E2667BC3900C855D8 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CED7A692665323000C855D8 /* Environment.swift */; };
 		3CED7A732667E3A800C855D8 /* EnvironmentMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CED7A722667E3A800C855D8 /* EnvironmentMock.swift */; };
@@ -104,6 +106,8 @@
 		3C8A7958266CDA3F00C1C6F8 /* Callable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Callable.swift; sourceTree = "<group>"; };
 		3C8A7961266CEB8000C1C6F8 /* Clock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clock.swift; sourceTree = "<group>"; };
 		3C8A796A266D080600C1C6F8 /* LoxFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoxFunction.swift; sourceTree = "<group>"; };
+		3C9FD76D26760CC6003F9614 /* ResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolverTests.swift; sourceTree = "<group>"; };
+		3C9FD77526760CF7003F9614 /* InterpreterMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpreterMock.swift; sourceTree = "<group>"; };
 		3CED7A692665323000C855D8 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		3CED7A722667E3A800C855D8 /* EnvironmentMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentMock.swift; sourceTree = "<group>"; };
 		3CF76908265FDA3C00A99096 /* AstPrinterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstPrinterTests.swift; sourceTree = "<group>"; };
@@ -193,6 +197,7 @@
 				3C33E09E265D39B700EF1612 /* Info.plist */,
 				3CF76960266366F600A99096 /* InterpreterTests.swift */,
 				3C8A78DE2668DFCC00C1C6F8 /* EnvironmentTests.swift */,
+				3C9FD76D26760CC6003F9614 /* ResolverTests.swift */,
 			);
 			path = LoxTests;
 			sourceTree = "<group>";
@@ -260,6 +265,7 @@
 				3CF7694E2662745D00A99096 /* ErrorReporterMock.swift */,
 				3CF7696F26636AD000A99096 /* PrinterMock.swift */,
 				3CED7A722667E3A800C855D8 /* EnvironmentMock.swift */,
+				3C9FD77526760CF7003F9614 /* InterpreterMock.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -429,6 +435,7 @@
 				3C33E09D265D39B700EF1612 /* ScannerTests.swift in Sources */,
 				3CF7697826636B4C00A99096 /* StandardPrinter.swift in Sources */,
 				3C5F0A692670F0B700851AE6 /* LoxFunction.swift in Sources */,
+				3C9FD77626760CF7003F9614 /* InterpreterMock.swift in Sources */,
 				3CF76911265FDABD00A99096 /* Expr.swift in Sources */,
 				3CF769842663E20E00A99096 /* Stmt.swift in Sources */,
 				3C5F0A7F2674F24B00851AE6 /* Stack.swift in Sources */,
@@ -440,6 +447,7 @@
 				3C8A78DF2668DFCC00C1C6F8 /* EnvironmentTests.swift in Sources */,
 				3CF7693026621C2600A99096 /* Parser.swift in Sources */,
 				3C33E0AC265D3BE400EF1612 /* Token.swift in Sources */,
+				3C9FD76E26760CC6003F9614 /* ResolverTests.swift in Sources */,
 				3CF7691F265FE00100A99096 /* RpnAstPrinterTests.swift in Sources */,
 				3CF76961266366F600A99096 /* InterpreterTests.swift in Sources */,
 				3C5F0A762674DDA200851AE6 /* Resolver.swift in Sources */,
