@@ -37,6 +37,9 @@ final class Lox {
         let parser = Parser(tokens)
         let stmts = parser.parse()
         if hadError { return }
+        let resolver = Resolver(interpreter)
+        try? resolver.resolve(stmts)
+        if hadError { return }
         interpreter.interpret(stmts)
     }
     

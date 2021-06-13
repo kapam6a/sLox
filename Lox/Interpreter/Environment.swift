@@ -20,6 +20,10 @@ class Environment {
         values[name] = value
     }
     
+    func assign(at distance: Int, _ name: Token, _ value: Any?) {
+        ancestor(distance).values[name.lexeme] = value
+    }
+    
     func assign(_ name: Token, _ value: Any?) throws {
         if values.keys.contains(name.lexeme) {
             return values[name.lexeme] = value
@@ -29,6 +33,10 @@ class Environment {
         }
         throw RuntimeError(operator: name,
                            message: "Undefined variable '" + name.lexeme + "'.")
+    }
+    
+    func get(at distance: Int, _ name: String) throws -> Any? {
+        ancestor(distance).values[name]!
     }
     
     func get(_ name: Token) throws -> Any? {
@@ -45,5 +53,16 @@ class Environment {
         }
         throw RuntimeError(operator: name,
                            message: "Undefined variable '" + name.lexeme + "'.")
+    }
+}
+
+private extension Environment {
+    
+    func ancestor(_ distance: Int) -> Environment {
+        var environment = self
+        for _ in 0..<distance {
+            environment = environment.enclosing!
+        }
+        return environment
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum LiteralType: Equatable, CustomStringConvertible {
+enum LiteralType: Equatable, CustomStringConvertible, Hashable {
     case string(String)
     case number(Double)
     case boolean(Bool)
@@ -23,9 +23,18 @@ enum LiteralType: Equatable, CustomStringConvertible {
             return formatter.string(from: NSNumber(value: number))!
         }
     }
+    
+    func hash(into hasher: inout Hasher) {
+        switch self {
+        case .string(let string): hasher.combine(string)
+        case .number(let number): hasher.combine(number)
+        case .boolean(let boolean): hasher.combine(boolean)
+        }
+        
+    }
 }
 
-struct Token: Equatable, CustomStringConvertible {
+struct Token: Equatable, CustomStringConvertible, Hashable {
     
     let type: TokenType
     let lexeme: String
@@ -41,5 +50,12 @@ struct Token: Equatable, CustomStringConvertible {
             lhs.lexeme == rhs.lexeme &&
             lhs.line == rhs.line &&
             lhs.literal == rhs.literal
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(type)
+        hasher.combine(lexeme)
+        hasher.combine(literal)
+        hasher.combine(line)
     }
 }

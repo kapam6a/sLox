@@ -79,7 +79,7 @@ private extension Scanner {
         case "\"": string()
         case _ where c.isNumber: number()
         case _ where c.isLetter: identifier()
-        default: Lox.error(line, "Unexpected character")
+        default: Lox.error(line, "Unexpected character:" + c.description)
         }
     }
     

@@ -16,6 +16,7 @@ final class Interpreter {
     
     private let printer: Printer
     private var environment: Environment
+    private var locals: Dictionary<Expr, Int> = [:]
     let globals: Environment
     
     init(_ printer: Printer = StandardPrinter(),
@@ -33,6 +34,10 @@ final class Interpreter {
         } catch {
             Lox.error(error as! RuntimeError)
         }
+    }
+    
+    func resolve(_ expr: Expr, _ depth: Int) {
+        locals[expr] = depth
     }
 }
 
@@ -106,12 +111,17 @@ extension Interpreter: VisitorExpr {
     
     func visitAssignExpr(_ expr: Assign) throws -> Any? {
         let value = try evaluate(expr.value)
-        try environment.assign(expr.name, value)
+        let distance = locals[expr]
+        if let distance = distance {
+            environment.assign(at: distance, expr.name, value)
+        } else {
+            try globals.assign(expr.name, value)
+        }
         return value
     }
     
     func visitVariableExpr(_ expr: Variable) throws -> Any? {
-        try environment.get(expr.name)
+        try lookUpVariable(expr.name, expr)
     }
     
     func visitBinaryExpr(_ expr: Binary) throws -> Any? {
@@ -194,6 +204,15 @@ extension Interpreter: VisitorExpr {
 }
 
 private extension Interpreter {
+    
+    func lookUpVariable(_ name: Token, _ expr: Expr) throws -> Any? {
+        let distance = locals[expr]
+        if let distance = distance {
+            return try environment.get(at: distance, name.lexeme)
+        } else {
+          return try globals.get(name)
+        }
+      }
     
     func evaluate(_ expr: Expr) throws -> Any? {
         try expr.accept(visitor: self)

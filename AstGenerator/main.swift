@@ -48,7 +48,7 @@ func defineAst(_ outputDir: String, _ baseName: String, _ types: [String]) {
 }
 
 func defineExpr(_ baseName: String) -> String {
-    var str = "class " + baseName + ": Equatable {" + "\n"
+    var str = "class " + baseName + ": Equatable, Hashable {" + "\n"
     str.append("\t" + "func accept<V: Visitor" + baseName + ", T>(visitor: V) throws -> T where T == V." + baseName + "Return {" + "\n")
     str.append("\t\t" + "fatalError()" + "\n")
     str.append("\t" + "}" + "\n")
@@ -58,6 +58,10 @@ func defineExpr(_ baseName: String) -> String {
     str.append("\t" + "}" + "\n")
     str.append("\n")
     str.append("\t" + "func isEqual(to other: " + baseName + ") -> Bool {" + "\n")
+    str.append("\t\t" + "fatalError()" + "\n")
+    str.append("\t" + "}" + "\n")
+    str.append("\n")
+    str.append("\t" + "func hash(into hasher: inout Hasher) {" + "\n")
     str.append("\t\t" + "fatalError()" + "\n")
     str.append("\t" + "}" + "\n")
     str.append("}" + "\n")
@@ -95,6 +99,15 @@ func defineType(_ baseName: String, _ className: String, _ fields: String) -> St
         if index != fields.components(separatedBy: ", ").endIndex - 1 {
             str.append(" &&")
         }
+        str.append("\n")
+    }
+    str.append("\t" + "}" + "\n")
+    str.append("\n")
+    str.append("\t" + "override func hash(into hasher: inout Hasher) {" + "\n")
+    for field in fields.components(separatedBy: ", ") {
+        str.append("\t\t")
+        let name = field.components(separatedBy: ":")[0]
+        str.append("hasher.combine(\(name))")
         str.append("\n")
     }
     str.append("\t" + "}" + "\n")

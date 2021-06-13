@@ -1,4 +1,4 @@
-class Stmt: Equatable {
+class Stmt: Equatable, Hashable {
 	func accept<V: VisitorStmt, T>(visitor: V) throws -> T where T == V.StmtReturn {
 		fatalError()
 	}
@@ -8,6 +8,10 @@ class Stmt: Equatable {
 	}
 
 	func isEqual(to other: Stmt) -> Bool {
+		fatalError()
+	}
+
+	func hash(into hasher: inout Hasher) {
 		fatalError()
 	}
 }
@@ -42,6 +46,10 @@ final class Block: Stmt {
 		guard let other = other as? Block else { return false }
 		return self.statements == other.statements
 	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(statements)
+	}
 }
 
 final class Expression: Stmt {
@@ -59,6 +67,10 @@ final class Expression: Stmt {
 	override func isEqual(to other: Stmt) -> Bool {
 		guard let other = other as? Expression else { return false }
 		return self.expression == other.expression
+	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(expression)
 	}
 }
 
@@ -84,6 +96,12 @@ final class Function: Stmt {
 			self.params == other.params &&
 			self.body == other.body
 	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(name)
+		hasher.combine(params)
+		hasher.combine(body)
+	}
 }
 
 final class If: Stmt {
@@ -108,6 +126,12 @@ final class If: Stmt {
 			self.thenBranch == other.thenBranch &&
 			self.elseBranch == other.elseBranch
 	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(condition)
+		hasher.combine(thenBranch)
+		hasher.combine(elseBranch)
+	}
 }
 
 final class Print: Stmt {
@@ -125,6 +149,10 @@ final class Print: Stmt {
 	override func isEqual(to other: Stmt) -> Bool {
 		guard let other = other as? Print else { return false }
 		return self.expression == other.expression
+	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(expression)
 	}
 }
 
@@ -147,6 +175,11 @@ final class Return: Stmt {
 		return self.keyword == other.keyword &&
 			self.value == other.value
 	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(keyword)
+		hasher.combine(value)
+	}
 }
 
 final class Var: Stmt {
@@ -168,6 +201,11 @@ final class Var: Stmt {
 		return self.name == other.name &&
 			self.initializer == other.initializer
 	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(name)
+		hasher.combine(initializer)
+	}
 }
 
 final class While: Stmt {
@@ -188,6 +226,11 @@ final class While: Stmt {
 		guard let other = other as? While else { return false }
 		return self.condition == other.condition &&
 			self.body == other.body
+	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(condition)
+		hasher.combine(body)
 	}
 }
 

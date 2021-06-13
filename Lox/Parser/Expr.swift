@@ -1,4 +1,4 @@
-class Expr: Equatable {
+class Expr: Equatable, Hashable {
 	func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.ExprReturn {
 		fatalError()
 	}
@@ -8,6 +8,10 @@ class Expr: Equatable {
 	}
 
 	func isEqual(to other: Expr) -> Bool {
+		fatalError()
+	}
+
+	func hash(into hasher: inout Hasher) {
 		fatalError()
 	}
 }
@@ -45,6 +49,11 @@ final class Assign: Expr {
 		return self.name == other.name &&
 			self.value == other.value
 	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(name)
+		hasher.combine(value)
+	}
 }
 
 final class Binary: Expr {
@@ -68,6 +77,12 @@ final class Binary: Expr {
 		return self.left == other.left &&
 			self.`operator` == other.`operator` &&
 			self.right == other.right
+	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(left)
+		hasher.combine(`operator`)
+		hasher.combine(right)
 	}
 }
 
@@ -93,6 +108,12 @@ final class Call: Expr {
 			self.paren == other.paren &&
 			self.arguments == other.arguments
 	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(callee)
+		hasher.combine(paren)
+		hasher.combine(arguments)
+	}
 }
 
 final class Grouping: Expr {
@@ -111,6 +132,10 @@ final class Grouping: Expr {
 		guard let other = other as? Grouping else { return false }
 		return self.expressions == other.expressions
 	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(expressions)
+	}
 }
 
 final class Literal: Expr {
@@ -128,6 +153,10 @@ final class Literal: Expr {
 	override func isEqual(to other: Expr) -> Bool {
 		guard let other = other as? Literal else { return false }
 		return self.value == other.value
+	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(value)
 	}
 }
 
@@ -153,6 +182,12 @@ final class Logical: Expr {
 			self.`operator` == other.`operator` &&
 			self.right == other.right
 	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(left)
+		hasher.combine(`operator`)
+		hasher.combine(right)
+	}
 }
 
 final class Unary: Expr {
@@ -174,6 +209,11 @@ final class Unary: Expr {
 		return self.`operator` == other.`operator` &&
 			self.right == other.right
 	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(`operator`)
+		hasher.combine(right)
+	}
 }
 
 final class Variable: Expr {
@@ -191,6 +231,10 @@ final class Variable: Expr {
 	override func isEqual(to other: Expr) -> Bool {
 		guard let other = other as? Variable else { return false }
 		return self.name == other.name
+	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(name)
 	}
 }
 
