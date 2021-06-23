@@ -23,9 +23,12 @@ protocol VisitorExpr{
 	func visitAssignExpr( _ expr: Assign) throws -> ExprReturn
 	func visitBinaryExpr( _ expr: Binary) throws -> ExprReturn
 	func visitCallExpr( _ expr: Call) throws -> ExprReturn
+	func visitGetExpr( _ expr: Get) throws -> ExprReturn
 	func visitGroupingExpr( _ expr: Grouping) throws -> ExprReturn
 	func visitLiteralExpr( _ expr: Literal) throws -> ExprReturn
 	func visitLogicalExpr( _ expr: Logical) throws -> ExprReturn
+	func visitLoxSetExpr( _ expr: LoxSet) throws -> ExprReturn
+	func visitThisExpr( _ expr: This) throws -> ExprReturn
 	func visitUnaryExpr( _ expr: Unary) throws -> ExprReturn
 	func visitVariableExpr( _ expr: Variable) throws -> ExprReturn
 }
@@ -116,6 +119,32 @@ final class Call: Expr {
 	}
 }
 
+final class Get: Expr {
+
+	let object: Expr
+	let name: Token
+
+	init(object: Expr, name: Token) {
+		self.object = object
+		self.name = name
+	}
+
+	override func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.ExprReturn {
+		try visitor.visitGetExpr(self)
+	}
+
+	override func isEqual(to other: Expr) -> Bool {
+		guard let other = other as? Get else { return false }
+		return self.object == other.object &&
+			self.name == other.name
+	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(object)
+		hasher.combine(name)
+	}
+}
+
 final class Grouping: Expr {
 
 	let expressions: [Expr]
@@ -187,6 +216,58 @@ final class Logical: Expr {
 		hasher.combine(left)
 		hasher.combine(`operator`)
 		hasher.combine(right)
+	}
+}
+
+final class LoxSet: Expr {
+
+	let object: Expr
+	let name: Token
+	let value: Expr
+
+	init(object: Expr, name: Token, value: Expr) {
+		self.object = object
+		self.name = name
+		self.value = value
+	}
+
+	override func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.ExprReturn {
+		try visitor.visitLoxSetExpr(self)
+	}
+
+	override func isEqual(to other: Expr) -> Bool {
+		guard let other = other as? LoxSet else { return false }
+		return self.object == other.object &&
+			self.name == other.name &&
+			self.value == other.value
+	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(object)
+		hasher.combine(name)
+		hasher.combine(value)
+	}
+}
+
+final class This: Expr {
+
+	let keyword: Token
+
+	init(keyword: Token) {
+		self.keyword = keyword
+	}
+
+	override func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.ExprReturn {
+		try visitor.visitThisExpr(self)
+	}
+
+	override func isEqual(to other: Expr) -> Bool {
+		guard let other = other as? This else { return false }
+		return self.keyword == other.keyword
+	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(keyword)
 	}
 }
 

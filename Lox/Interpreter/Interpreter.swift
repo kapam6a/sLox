@@ -43,8 +43,24 @@ class Interpreter {
 
 extension Interpreter: VisitorStmt {
     
+    func visitClassStmt(_ stmt: Class) throws -> () {
+        environment.define(stmt.name.lexeme, nil)
+        var methods: Dictionary<String, LoxFunction> = [:]
+        for  method in stmt.methods {
+            let function = LoxFunction(declaration: method,
+                                       closure: environment,
+                                       isInitializer: method.name.lexeme == "init")
+            methods[method.name.lexeme] = function
+        }
+        
+        let `class` = LoxClass(stmt.name.lexeme, methods)
+        try environment.assign(stmt.name, `class`)
+    }
+    
     func visitFunctionStmt(_ stmt: Function) throws -> Void {
-        let function = LoxFunction(declaration: stmt, closure: environment)
+        let function = LoxFunction(declaration: stmt,
+                                   closure: environment,
+                                   isInitializer: false)
         environment.define(stmt.name.lexeme, function)
     }
     
@@ -108,6 +124,29 @@ extension Interpreter {
 }
 
 extension Interpreter: VisitorExpr {
+    
+    func visitThisExpr(_ expr: This) throws -> Any? {
+        try lookUpVariable(expr.keyword, expr)
+    }
+    
+    
+    func visitLoxSetExpr(_ expr: LoxSet) throws -> Any? {
+        let object = try evaluate(expr.object)
+        guard let instance = object as? LoxInstance else {
+            throw RuntimeError(operator: expr.name, message: "Only instances have fields.")
+        }
+        let value = try evaluate(expr.value)
+        instance.set(expr.name, value)
+        return value
+    }
+    
+    func visitGetExpr(_ expr: Get) throws -> Any? {
+        let object = try evaluate(expr.object)
+        if let object = object as? LoxInstance {
+            return try object.get(expr.name)
+        }
+        throw RuntimeError(operator: expr.name, message: "Only instances have properties.");
+    }
     
     func visitAssignExpr(_ expr: Assign) throws -> Any? {
         let value = try evaluate(expr.value)

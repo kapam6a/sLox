@@ -31,6 +31,7 @@ private extension Parser {
     
     func declaration() -> Stmt? {
         do {
+            if match(.class) { return try classDeclaration() }
             if match(.var) { return try varDeclaration() }
             if match(.fun) { return try function("function") }
             return try statement()
@@ -40,7 +41,18 @@ private extension Parser {
         }
     }
     
-    func varDeclaration() throws -> Stmt {
+    func classDeclaration() throws -> Class {
+        let name = try consume(.identifier, "Expect class name.")
+        try consume(.leftBrace, "Expect '{' before class body.")
+        var methods: [Function] = []
+        while !check(.rightBrace) && !isAtEnd() {
+            methods.append(try function("method"))
+        }
+        try consume(.rightBrace, "Expect '}' after class body.")
+        return Class(name: name, methods: methods)
+    }
+    
+    func varDeclaration() throws -> Var {
         let name = try consume(.identifier, "Expect variable name.")
         var initializer: Expr?
         if match(.equal) {
@@ -50,7 +62,7 @@ private extension Parser {
         return Var(name: name, initializer: initializer)
     }
     
-    private func function(_ kind: String) throws -> Stmt {
+    func function(_ kind: String) throws -> Function {
         let name = try consume(.identifier, "Expect " + kind + " name.")
         try consume(.leftParen, "Expect '(' after " + kind + " name.")
         var parameters: [Token] = []
@@ -78,13 +90,13 @@ private extension Parser {
         return try expressionStatement()
     }
     
-    func printStatement() throws -> Stmt {
+    func printStatement() throws -> Print {
         let expr = try expression()
         try consume(.semicolon, "Expect ';' after value.")
         return Print(expression: expr)
     }
     
-    func returnStatement() throws -> Stmt {
+    func returnStatement() throws -> Return {
         let keyword = previous()
         var value: Expr?
         if !check(.semicolon) {
@@ -103,7 +115,7 @@ private extension Parser {
         return stmts
     }
     
-    func ifStatement() throws -> Stmt {
+    func ifStatement() throws -> If {
         try consume(.leftParen, "Expect '(' after 'if'.")
         let condition = try expression()
         try consume(.rightParen, "Expect ')' after 'if' condition.")
@@ -115,7 +127,7 @@ private extension Parser {
         return If(condition: condition, thenBranch: thenBranch, elseBranch: elseBranch)
     }
     
-    func whileStatement() throws -> Stmt {
+    func whileStatement() throws -> While {
         try consume(.leftParen, "Expect '(' after 'while'.")
         let condition = try expression()
         try consume(.rightParen, "Expect ')' after 'while' condition.")
@@ -161,7 +173,7 @@ private extension Parser {
         return body
     }
     
-    func expressionStatement() throws -> Stmt {
+    func expressionStatement() throws -> Expression {
         let expr = try expression()
         try consume(.semicolon, "Expect ';' after value.")
         return Expression(expression: expr)
@@ -183,6 +195,8 @@ private extension Parser {
             if let expr = expr as? Variable {
                 let name = expr.name
                 return Assign(name: name, value: value)
+            } else if let get = expr as? Get {
+                return LoxSet(object: get.object, name: get.name, value: value)
             }
             _ = error(equals, "Invalid assignment target.")
         }
@@ -274,6 +288,9 @@ private extension Parser {
         while true {
             if match(.leftParen) {
                 expr = try finishCall(expr)
+            } else if match(.dot) {
+                let name = try consume(.identifier, "Expect property name after '.'.");
+                expr = Get(object: expr, name: name)
             } else {
                 break
             }
@@ -294,6 +311,7 @@ private extension Parser {
             try consume(.rightParen, "Expect ')' after expression.")
             return Grouping(expressions: exps)
         }
+        if match(.this) { return This(keyword: previous()) }
         if match(.identifier) { return Variable(name: previous()) }
         
         throw error(peek(), "Expect expression.")

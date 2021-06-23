@@ -8,5 +8,5 @@
 protocol Callable {
     
     func arity() -> Int
-    func call(_ interpreter: Interpreter, _ arguments: [Any?]) throws -> Any?
+    @discardableResult func call(_ interpreter: Interpreter, _ arguments: [Any?]) throws -> Any?
 }

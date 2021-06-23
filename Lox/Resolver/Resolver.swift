@@ -7,9 +7,16 @@
 
 import Foundation
 
+private enum ClassType {
+    case none
+    case `class`
+}
+
 private enum FunctionType {
-   case none
-   case function
+    case none
+    case function
+    case method
+    case initializer
  }
 
 final class Resolver {
@@ -17,7 +24,8 @@ final class Resolver {
     private let interpreter: Interpreter
     private let scopes: Stack<Dictionary<String, Bool>> = Stack()
     private var currentFunction: FunctionType = .none
-    
+    private var currentClass: ClassType = .none
+
     init(_ interpreter: Interpreter) {
         self.interpreter = interpreter
     }
@@ -28,6 +36,26 @@ final class Resolver {
 }
 
 extension Resolver: VisitorStmt {
+    
+    func visitClassStmt(_ stmt: Class) throws -> () {
+        let enclosingClass = currentClass
+        currentClass = .class
+        declare(stmt.name)
+        define(stmt.name)
+        beginScope()
+        var scope = scopes.pop()!
+        scope["this"] = true
+        scopes.push(scope)
+        for method in stmt.methods {
+            var declaration: FunctionType = .method
+            if method.name.lexeme == "init" {
+                declaration = .initializer
+            }
+            try resolveFunction(method, declaration)
+        }
+        endScope()
+        currentClass = enclosingClass
+    }
     
     func visitBlockStmt(_ stmt: Block) throws -> Void {
         beginScope()
@@ -58,10 +86,13 @@ extension Resolver: VisitorStmt {
     }
     
     func visitReturnStmt(_ stmt: Return) throws -> Void {
-        if (currentFunction == .none) {
+        if currentFunction == .none {
             Lox.error(stmt.keyword, "Can't return from top-level code.");
         }
         if let value = stmt.value {
+            if currentFunction == .initializer {
+                Lox.error(stmt.keyword, "Can't return a value from an initializer.")
+            }
             try resolve(value)
         }
     }
@@ -81,6 +112,23 @@ extension Resolver: VisitorStmt {
 }
 
 extension Resolver: VisitorExpr {
+    
+    func visitThisExpr(_ expr: This) throws -> Void {
+        if currentClass == .none {
+            Lox.error(expr.keyword, "Can't use 'this' outside of a class.")
+        }
+        try resolveLocal(expr, expr.keyword)
+    }
+    
+    
+    func visitLoxSetExpr(_ expr: LoxSet) throws -> Void {
+        try resolve(expr.value)
+        try resolve(expr.object)
+    }
+    
+    func visitGetExpr(_ expr: Get) throws -> Void {
+        try resolve(expr.object)
+    }
     
     func visitAssignExpr(_ expr: Assign) throws -> Void {
         try resolve(expr.value)

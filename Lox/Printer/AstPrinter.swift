@@ -13,6 +13,18 @@ final class AstPrinter: VisitorExpr {
         try! expr.accept(visitor: self)
     }
     
+    func visitThisExpr(_ expr: This) throws -> String {
+        ""
+    }
+    
+    func visitLoxSetExpr(_ expr: LoxSet) throws -> String {
+        ""
+    }
+    
+    func visitGetExpr(_ expr: Get) throws -> String {
+        ""
+    }
+    
     func visitCallExpr(_ expr: Call) throws -> String {
         ""
     }

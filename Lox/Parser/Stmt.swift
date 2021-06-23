@@ -21,6 +21,7 @@ protocol VisitorStmt{
 	associatedtype StmtReturn
 
 	func visitBlockStmt( _ stmt: Block) throws -> StmtReturn
+	func visitClassStmt( _ stmt: Class) throws -> StmtReturn
 	func visitExpressionStmt( _ stmt: Expression) throws -> StmtReturn
 	func visitFunctionStmt( _ stmt: Function) throws -> StmtReturn
 	func visitIfStmt( _ stmt: If) throws -> StmtReturn
@@ -49,6 +50,32 @@ final class Block: Stmt {
 
 	override func hash(into hasher: inout Hasher) {
 		hasher.combine(statements)
+	}
+}
+
+final class Class: Stmt {
+
+	let name: Token
+	let methods: [Function]
+
+	init(name: Token, methods: [Function]) {
+		self.name = name
+		self.methods = methods
+	}
+
+	override func accept<V: VisitorStmt, T>(visitor: V) throws -> T where T == V.StmtReturn {
+		try visitor.visitClassStmt(self)
+	}
+
+	override func isEqual(to other: Stmt) -> Bool {
+		guard let other = other as? Class else { return false }
+		return self.name == other.name &&
+			self.methods == other.methods
+	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(name)
+		hasher.combine(methods)
 	}
 }
 
