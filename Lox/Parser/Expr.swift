@@ -28,6 +28,7 @@ protocol VisitorExpr{
 	func visitLiteralExpr( _ expr: Literal) throws -> ExprReturn
 	func visitLogicalExpr( _ expr: Logical) throws -> ExprReturn
 	func visitLoxSetExpr( _ expr: LoxSet) throws -> ExprReturn
+	func visitSuperExpr( _ expr: Super) throws -> ExprReturn
 	func visitThisExpr( _ expr: This) throws -> ExprReturn
 	func visitUnaryExpr( _ expr: Unary) throws -> ExprReturn
 	func visitVariableExpr( _ expr: Variable) throws -> ExprReturn
@@ -246,6 +247,32 @@ final class LoxSet: Expr {
 		hasher.combine(object)
 		hasher.combine(name)
 		hasher.combine(value)
+	}
+}
+
+final class Super: Expr {
+
+	let keyword: Token
+	let method: Token
+
+	init(keyword: Token, method: Token) {
+		self.keyword = keyword
+		self.method = method
+	}
+
+	override func accept<V: VisitorExpr, T>(visitor: V) throws -> T where T == V.ExprReturn {
+		try visitor.visitSuperExpr(self)
+	}
+
+	override func isEqual(to other: Expr) -> Bool {
+		guard let other = other as? Super else { return false }
+		return self.keyword == other.keyword &&
+			self.method == other.method
+	}
+
+	override func hash(into hasher: inout Hasher) {
+		hasher.combine(keyword)
+		hasher.combine(method)
 	}
 }
 

@@ -10,6 +10,7 @@ import Foundation
 private enum ClassType {
     case none
     case `class`
+    case subclass
 }
 
 private enum FunctionType {
@@ -42,6 +43,20 @@ extension Resolver: VisitorStmt {
         currentClass = .class
         declare(stmt.name)
         define(stmt.name)
+        if let superclass = stmt.superclass {
+            if superclass.name == stmt.name {
+                Lox.error(superclass.name, "A class can't inherit from itself.")
+            }
+            currentClass = .subclass
+            try resolve(superclass)
+        }
+        if stmt.superclass != nil {
+            beginScope()
+            var scope = scopes.pop()!
+            scope["super"] = true
+            scopes.push(scope)
+        }
+
         beginScope()
         var scope = scopes.pop()!
         scope["this"] = true
@@ -54,6 +69,9 @@ extension Resolver: VisitorStmt {
             try resolveFunction(method, declaration)
         }
         endScope()
+        if stmt.superclass != nil {
+            endScope()
+        }
         currentClass = enclosingClass
     }
     
@@ -112,6 +130,15 @@ extension Resolver: VisitorStmt {
 }
 
 extension Resolver: VisitorExpr {
+    
+    func visitSuperExpr(_ expr: Super) throws -> Void {
+        if currentClass == .none {
+            Lox.error(expr.keyword, "Can't use 'super' outside of a class.");
+        } else if currentClass != .subclass {
+            Lox.error(expr.keyword, "Can't use 'super' in a class with no superclass.");
+        }
+        try resolveLocal(expr, expr.keyword)
+    }
     
     func visitThisExpr(_ expr: This) throws -> Void {
         if currentClass == .none {

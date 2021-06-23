@@ -25,7 +25,7 @@ final class LoxFunction: CustomStringConvertible, Callable {
         declaration.params.count
     }
     
-    func call(_ interpreter: Interpreter, _ arguments: [Any?]) throws -> Any? {
+    @discardableResult func call(_ interpreter: Interpreter, _ arguments: [Any?]) throws -> Any? {
         let environment = Environment(interpreter.globals)
         for (index, param) in declaration.params.enumerated() {
             environment.define(param.lexeme, arguments[index])

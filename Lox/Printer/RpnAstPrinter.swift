@@ -9,8 +9,13 @@ import Foundation
 
 final class RpnAstPrinter: VisitorExpr {
     
+    
     func print(_ expr: Expr) -> String {
         try! expr.accept(visitor: self)
+    }
+    
+    func visitSuperExpr(_ expr: Super) throws -> String {
+        ""
     }
     
     func visitThisExpr(_ expr: This) throws -> String {

@@ -10,11 +10,14 @@ import Foundation
 final class LoxClass: CustomStringConvertible, Callable {
     
     private let name: String
+    private let superclass: LoxClass?
     private let methods: Dictionary<String, LoxFunction>
     
     init(_ name: String,
+         _ superclass: LoxClass?,
          _ methods: Dictionary<String, LoxFunction>) {
         self.name = name
+        self.superclass = superclass
         self.methods = methods
     }
     
@@ -39,6 +42,12 @@ final class LoxClass: CustomStringConvertible, Callable {
     }
     
     func findMethod(_ name: String) -> LoxFunction? {
-        methods[name]
+        if methods.keys.contains(name) {
+            return methods[name]
+        }
+        if let superclass = superclass {
+            return superclass.findMethod(name)
+        }
+        return nil
     }
 }

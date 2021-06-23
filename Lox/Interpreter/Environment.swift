@@ -9,7 +9,7 @@ import Foundation
 
 class Environment {
     
-    private let enclosing: Environment?
+    let enclosing: Environment?
     private var values: [String : Any?] = [:]
     
     init(_ enclosing: Environment? = nil) {

@@ -22,6 +22,7 @@ defineAst(outputDir, "Expr", [
     "Literal  :: value: LiteralType?",
     "Logical  :: left: Expr, `operator`: Token, right: Expr",
     "LoxSet   :: object: Expr, name: Token, value: Expr",
+    "Super    :: keyword: Token, method: Token",
     "This     :: keyword: Token",
     "Unary    :: `operator`: Token, right: Expr",
     "Variable :: name: Token"
@@ -29,7 +30,7 @@ defineAst(outputDir, "Expr", [
 
 defineAst(outputDir, "Stmt", [
     "Block      :: statements: [Stmt]",
-    "Class      :: name: Token, methods: [Function]",
+    "Class      :: name: Token, superclass: Variable?, methods: [Function]",
     "Expression :: expression: Expr",
     "Function   :: name: Token, params: [Token], body: [Stmt]",
     "If         :: condition: Expr , thenBranch: Stmt, elseBranch: Stmt?",

@@ -44,7 +44,18 @@ class Interpreter {
 extension Interpreter: VisitorStmt {
     
     func visitClassStmt(_ stmt: Class) throws -> () {
+        var superclass: LoxClass?
+        if let superclassVar = stmt.superclass {
+            superclass = try evaluate(superclassVar) as? LoxClass
+            if superclass == nil {
+                throw RuntimeError(operator: superclassVar.name, message: "Superclass must be a class.")
+            }
+        }
         environment.define(stmt.name.lexeme, nil)
+        if stmt.superclass != nil {
+            environment = Environment(environment);
+            environment.define("super", superclass)
+        }
         var methods: Dictionary<String, LoxFunction> = [:]
         for  method in stmt.methods {
             let function = LoxFunction(declaration: method,
@@ -53,7 +64,11 @@ extension Interpreter: VisitorStmt {
             methods[method.name.lexeme] = function
         }
         
-        let `class` = LoxClass(stmt.name.lexeme, methods)
+        let `class` = LoxClass(stmt.name.lexeme, superclass, methods)
+        
+        if superclass != nil {
+            environment = environment.enclosing!
+        }
         try environment.assign(stmt.name, `class`)
     }
     
@@ -124,6 +139,16 @@ extension Interpreter {
 }
 
 extension Interpreter: VisitorExpr {
+    
+    func visitSuperExpr(_ expr: Super) throws -> Any? {
+        let distance = locals[expr]
+        let superclass = try environment.get(at: distance!, "super") as? LoxClass
+        let object = try environment.get(at: distance! - 1, "this") as? LoxInstance
+        if let method = superclass?.findMethod(expr.method.lexeme) {
+            return method.bind(object!)
+        }
+        throw RuntimeError(operator: expr.method, message: "Undefined property '" + expr.method.lexeme + "'.")
+    }
     
     func visitThisExpr(_ expr: This) throws -> Any? {
         try lookUpVariable(expr.keyword, expr)

@@ -43,13 +43,18 @@ private extension Parser {
     
     func classDeclaration() throws -> Class {
         let name = try consume(.identifier, "Expect class name.")
+        var superclass: Variable?
+        if match(.less) {
+            try consume(.identifier, "Expect superclass name.");
+            superclass = Variable(name: previous())
+        }
         try consume(.leftBrace, "Expect '{' before class body.")
         var methods: [Function] = []
         while !check(.rightBrace) && !isAtEnd() {
             methods.append(try function("method"))
         }
         try consume(.rightBrace, "Expect '}' after class body.")
-        return Class(name: name, methods: methods)
+        return Class(name: name, superclass: superclass, methods: methods)
     }
     
     func varDeclaration() throws -> Var {
@@ -313,7 +318,13 @@ private extension Parser {
         }
         if match(.this) { return This(keyword: previous()) }
         if match(.identifier) { return Variable(name: previous()) }
-        
+        if match(.super) {
+            let keyword = previous()
+            try consume(.dot, "Expect '.' after 'super'.");
+            let method = try consume(.identifier, "Expect superclass method name.")
+            return Super(keyword: keyword, method: method)
+        }
+
         throw error(peek(), "Expect expression.")
     }
 }

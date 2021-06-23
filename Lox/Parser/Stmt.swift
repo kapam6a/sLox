@@ -56,10 +56,12 @@ final class Block: Stmt {
 final class Class: Stmt {
 
 	let name: Token
+	let superclass: Variable?
 	let methods: [Function]
 
-	init(name: Token, methods: [Function]) {
+	init(name: Token, superclass: Variable?, methods: [Function]) {
 		self.name = name
+		self.superclass = superclass
 		self.methods = methods
 	}
 
@@ -70,11 +72,13 @@ final class Class: Stmt {
 	override func isEqual(to other: Stmt) -> Bool {
 		guard let other = other as? Class else { return false }
 		return self.name == other.name &&
+			self.superclass == other.superclass &&
 			self.methods == other.methods
 	}
 
 	override func hash(into hasher: inout Hasher) {
 		hasher.combine(name)
+		hasher.combine(superclass)
 		hasher.combine(methods)
 	}
 }
